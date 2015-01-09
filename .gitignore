@@ -1,0 +1,5 @@
+/Library/
+*.exe
+/*_Data/
+*.userprefs
+*.7z

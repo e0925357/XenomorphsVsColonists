@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 74e6410545af11e4e9b37fa911deface
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - selectedMaterial: {fileID: 2100000, guid: 0c1821c24c682ce44b5aae641a3874e7, type: 2}
+  - walkableMaterial: {fileID: 2100000, guid: dae8dd45897b88249acfca261771b1e8, type: 2}
+  - enemyMaterial: {fileID: 2100000, guid: bbc9969d0926e714b8aad33afe2f4fc9, type: 2}
+  - highligherPrefab: {fileID: 161780, guid: 39575a29947833444ac44e7b750a66ee, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
