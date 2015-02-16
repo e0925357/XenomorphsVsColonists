@@ -13,6 +13,8 @@ public class HighlighterManager : MonoBehaviour {
 
 	public GameObject highligherPrefab;
 
+	public UnitManager unitManager;
+
 	private GameBoard gameboard;
 	private HighlighterData[,] highlighters;
 	private HighlighterState[,] highlighterStates;
@@ -33,6 +35,7 @@ public class HighlighterManager : MonoBehaviour {
 				highlighters[x, y].transform.position = new Vector3(x*2, 0, y*2);
 				highlighters[x, y].x = x;
 				highlighters[x, y].y = y;
+				highlighters[x, y].unitManager = unitManager;
 				highlighterStates[x, y] = HighlighterState.HIDDEN;
 				MeshRenderer[] meshRenderers = highlighters[x, y].GetComponentsInChildren<MeshRenderer>();
 

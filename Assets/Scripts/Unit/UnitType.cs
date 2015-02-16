@@ -8,6 +8,7 @@ public class UnitType {
 	public static readonly UnitType XENO = new UnitType(2, "Xenomorph");
 
 	private static PlayerManager playerManager;
+	private static UnitManager unitManager;
 	
 	static UnitType() {
 		instances = new UnitType[]{COLONIST, SOLDIER, XENO};
@@ -26,8 +27,9 @@ public class UnitType {
 	private GameObject prefab;
 	private GameObject previewPrefab;
 
-	public static void init(PlayerManager playerManager) {
+	public static void init(PlayerManager playerManager, UnitManager unitManager) {
 		UnitType.playerManager = playerManager;
+		UnitType.unitManager = unitManager;
 	}
 	
 	private UnitType(int id, string name) {
@@ -40,9 +42,9 @@ public class UnitType {
 		case 0:
 			return null;
 		case 1:
-			return new Soldier(new Vector2i(x, y), playerManager);
+			return new Soldier(new Vector2i(x, y), playerManager, unitManager);
 		case 2:
-			return new Xenomorph(new Vector2i(x, y), playerManager);
+			return new Xenomorph(new Vector2i(x, y), playerManager, unitManager);
 		default:
 			return null;
 		}

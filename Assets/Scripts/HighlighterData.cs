@@ -5,14 +5,11 @@ public class HighlighterData : MonoBehaviour {
 
 	public int x;
 	public int y;
+	public UnitManager unitManager;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	void OnMouseOver() {
+		if(Input.GetMouseButtonDown(1) && unitManager.SelectedUnit != null) {
+			unitManager.SelectedUnit.DefaultFloorAction.doAction(new Vector2i(x,y));
+		}
 	}
 }

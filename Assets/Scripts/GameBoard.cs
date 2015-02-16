@@ -58,6 +58,8 @@ public class GameBoard : MonoBehaviour {
 				} else {
 					tileTypes[x,y] = tiles[x,y].Type;
 				}
+
+				tiles[x,y].deactivateCollider();
 			}
 		}
 	}

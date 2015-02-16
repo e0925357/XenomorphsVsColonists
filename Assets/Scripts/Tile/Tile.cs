@@ -40,6 +40,10 @@ public abstract class Tile {
 		}
 	}
 
+	public void deactivateCollider() {
+		gObject.collider.enabled = false;
+	}
+
 	public void deleteGameObject() {
 		if(gObject != null) {
 			GameObject.Destroy(gObject);

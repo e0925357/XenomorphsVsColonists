@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public abstract class Unit {
 	protected int maxAP;
@@ -14,7 +15,7 @@ public abstract class Unit {
 
 	protected Vector2i[] pathToWalk;
 	protected int nextPathIndex = -1;
-	protected TileType[] walkableTiles;
+	protected HashSet<TileType> walkableTiles;
 
 	protected UnitAction[] actions;
 	protected UnitAction defaultFloorAction;
@@ -22,9 +23,11 @@ public abstract class Unit {
 	protected UnitAction defaultAllyAction;
 
 	protected GameObject gameObject = null;
+	protected UnitData unitData = null;
 	protected PlayerManager playerManager;
+	protected UnitManager unitManager;
 
-	public Unit(int maxAP, float maxHealth, UnitType type, int team, Vector2i position, TileType[] walkableTiles, PlayerManager playerManager) {
+	public Unit(int maxAP, float maxHealth, UnitType type, int team, Vector2i position, TileType[] walkableTiles, PlayerManager playerManager, UnitManager unitManager) {
 		this.maxAP = maxAP;
 		ap = maxAP;
 		this.maxHealth = maxHealth;
@@ -32,8 +35,15 @@ public abstract class Unit {
 		this.type = type;
 		this.team = team;
 		this.position = position;
-		this.walkableTiles = walkableTiles;
+		this.walkableTiles = new HashSet<TileType>(walkableTiles);
 		this.playerManager = playerManager;
+		this.unitManager = unitManager;
+
+		PlayerManager.endTurnEvent += onEndTurn;
+	}
+
+	~Unit() {
+		PlayerManager.endTurnEvent -= onEndTurn;
 	}
 
 	public void createGameObject() {
@@ -47,9 +57,10 @@ public abstract class Unit {
 
 		gameObject = (GameObject)GameObject.Instantiate(type.Prefab);
 		gameObject.transform.position = new Vector3(position.x*2, 0, position.y*2);
-		UnitData unitData = gameObject.transform.GetChild(0).GetComponent<UnitData>();
+		unitData = gameObject.transform.GetChild(0).GetComponent<UnitData>();
 		unitData.unit = this;
 		unitData.playerManager = playerManager;
+		unitData.unitManager = unitManager;
 	}
 
 	public void destroyGameObject() {
@@ -58,6 +69,24 @@ public abstract class Unit {
 
 		GameObject.Destroy(gameObject);
 		gameObject = null;
+	}
+
+	public void onEndTurn() {
+		nextTurn();
+	}
+
+	public bool moveToTile(Vector2i target, Vector2i[] path) {
+		if(path == null || path.Length <= 0)
+			throw new System.ArgumentNullException("path");
+
+		if(unitManager.moveUnit(position, target)) {
+			position = target;
+			PathToWalk = path;
+
+			return true;
+		}
+
+		return false;
 	}
 	
 
@@ -69,22 +98,9 @@ public abstract class Unit {
 		nextPathIndex++;
 	}
 
-	public bool canWalkOn(TileType tileType) {
-		if(tileType == null) {
-			Debug.LogWarning("Unit.canWalkOn(TileType) has been called with a parameter of value null!");
-			return false;
-		}
-
-		foreach(TileType tt in walkableTiles) {
-			if(tt == tileType) return true;
-		}
-
-		return false;
-	}
-
 	public Vector2i? NextTile {
 		get {
-			if(nextPathIndex < 0 || nextPathIndex > pathToWalk.Length) return null;
+			if(pathToWalk == null || nextPathIndex < 0 || nextPathIndex >= pathToWalk.Length) return null;
 			else return pathToWalk[nextPathIndex];
 		}
 	}
@@ -139,7 +155,9 @@ public abstract class Unit {
 			return this.position;
 		}
 		set {
-			position = value;
+			if(unitManager.moveUnit(position, value)) {
+				position = value;
+			}
 		}
 	}
 
@@ -148,11 +166,14 @@ public abstract class Unit {
 			return this.pathToWalk;
 		}
 		set {
+			nextPathIndex = 1;
 			pathToWalk = value;
+
+			unitData.startMovement();
 		}
 	}
 
-	public TileType[] WalkableTiles {
+	public HashSet<TileType> WalkableTiles {
 		get {
 			return this.walkableTiles;
 		}
