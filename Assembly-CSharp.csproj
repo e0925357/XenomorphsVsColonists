@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\Tile\VentShaft.cs" />
      <Compile Include="Assets\Scripts\Tile\Wall.cs" />
      <Compile Include="Assets\Scripts\Unit\ActionManager.cs" />
+     <Compile Include="Assets\Scripts\Unit\ShootAction.cs" />
      <Compile Include="Assets\Scripts\Unit\Soldier.cs" />
      <Compile Include="Assets\Scripts\Unit\Unit.cs" />
      <Compile Include="Assets\Scripts\Unit\UnitAction.cs" />
@@ -78,6 +79,9 @@
      <Compile Include="Assets\Scripts\Unit\UnitType.cs" />
      <Compile Include="Assets\Scripts\Unit\Xenomorph.cs" />
      <Compile Include="Assets\Scripts\Vector2i.cs" />
+     <Compile Include="Assets\Scripts\VisibilitySwitcher.cs" />
+     <Compile Include="Assets\Scripts\animations\ParticleMover.cs" />
+     <Compile Include="Assets\Scripts\animations\ProjectileSpawner.cs" />
      <Compile Include="Assets\Scripts\animations\RotationAnimation.cs" />
      <Compile Include="Assets\Scripts\animations\ScaleAnimation.cs" />
      <Compile Include="Assets\Scripts\animations\TranslationAnimation.cs" />

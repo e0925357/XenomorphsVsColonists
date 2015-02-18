@@ -32,10 +32,12 @@ public class BreadthFirstSearch {
 			}
 
 			foreach(Vector2i offsetVec in neighbourOffsets) {
-				SearchStep neighbourStep = new SearchStep(currentStep.Position + offsetVec, currentStep);
+				Vector2i neighbourPosition = currentStep.Position + offsetVec;
+				SearchStep neighbourStep = new SearchStep(neighbourPosition, currentStep);
 
 				if(neighbourStep.Step > maxSteps || visitedSet.Contains(neighbourStep) || !gameBoard.isInside(neighbourStep.Position.x, neighbourStep.Position.y) ||
-				   !walkableTiles.Contains(gameBoard.tileTypes[neighbourStep.Position.x, neighbourStep.Position.y])) continue;
+				   !walkableTiles.Contains(gameBoard.tileTypes[neighbourStep.Position.x, neighbourStep.Position.y]) ||
+				   !ignoreUnits && unitManager.getUnit(neighbourPosition) != null) continue;
 
 				visitedSet.Add(neighbourStep);
 				openList.Enqueue(neighbourStep);

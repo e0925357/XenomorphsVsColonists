@@ -6,13 +6,15 @@ public class UnitActionType {
 	public static readonly UnitActionType SHOOT = new UnitActionType(1, "shoot");
 
 	private static HighlighterManager highlighterManager = null;
+	private static GameObject shootPrefab = null;
 
 	private readonly int id;
 	private readonly string name;
 	private Sprite icon;
 
-	public static void init(HighlighterManager highlighterManager) {
+	public static void init(HighlighterManager highlighterManager, GameObject shootPrefab) {
 		UnitActionType.highlighterManager = highlighterManager;
+		UnitActionType.shootPrefab = shootPrefab;
 	}
 
 
@@ -25,6 +27,8 @@ public class UnitActionType {
 		switch(id) {
 		case 0:
 			return new UnitMoveAction(unit, highlighterManager);
+		case 1:
+			return new ShootAction(unit, highlighterManager, shootPrefab);
 		default:
 			return null;
 		}

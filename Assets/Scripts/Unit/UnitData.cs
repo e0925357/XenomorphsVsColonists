@@ -7,18 +7,29 @@ public class UnitData : MonoBehaviour {
 	public PlayerManager playerManager;
 	public UnitManager unitManager;
 
-	void OnMouseOver() {
-		//highlight possible target
+	private ActionManager actionManager;
 
+	void Start() {
+		actionManager = GameObject.Find("ActionManager").GetComponent<ActionManager>();
+	}
+
+	void OnMouseOver() {
 		if(Input.GetMouseButtonDown(0)) {
 			//Left button
 			if(unit.Team == playerManager.currentPlayer) {
 				unitManager.SelectedUnit = unit;
 			}
 		} else if(Input.GetMouseButtonDown(1)) {
-			//Right button
-			Debug.Log("Right");
+			actionManager.doAction(unit);
 		}
+	}
+
+	void OnMouseEnter() {
+		renderer.material.color = Color.white;
+	}
+
+	void OnMouseExit() {
+		renderer.material.color = new Color(0.8f, 0.8f, 0.8f);
 	}
 
 	void Update() {

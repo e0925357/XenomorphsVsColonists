@@ -93,6 +93,8 @@ public class ActionManager : MonoBehaviour {
 					return;
 				}
 			}
+
+			selectedAction.actionSelected();
 		}
 
 		if(!selectedAction.TargetFloor) {
@@ -137,6 +139,8 @@ public class ActionManager : MonoBehaviour {
 					return;
 				}
 			}
+
+			selectedAction.actionSelected();
 		}
 
 		if(!selectedAction.TargetUnit) {

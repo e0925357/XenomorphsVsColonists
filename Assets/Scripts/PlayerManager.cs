@@ -3,33 +3,33 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerManager : MonoBehaviour {
-	public delegate void onEndTurn();
+	public delegate void onEndTurn(int lastPlayer, int nextPlayer);
 	public static event onEndTurn endTurnEvent;
 
 
 	public int currentPlayer = 1;
 	public int playerCount = 2;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	public Canvas HUD_Canvas;
+	public Canvas confidentialCanvas;
+	public Text nextPlayerText;
 
 	public void endTurn() {
 
+		HUD_Canvas.enabled = false;
+		confidentialCanvas.enabled = true;
+
+		int nextPlayer = currentPlayer + 1;
+
+		if(nextPlayer > playerCount) {
+			nextPlayer = 1;
+		}
+
 		if(endTurnEvent != null) {
-			endTurnEvent();
+			endTurnEvent(currentPlayer, nextPlayer);
 		}
 
-		currentPlayer++;
-
-		if(currentPlayer > playerCount) {
-			currentPlayer = 1;
-		}
+		nextPlayerText.text = "Player " + nextPlayer;
+		currentPlayer = nextPlayer;
 	}
 }

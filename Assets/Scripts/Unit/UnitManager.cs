@@ -18,10 +18,11 @@ public class UnitManager : MonoBehaviour {
 
 	public Sprite moveIcon;
 	public Sprite shootIcon;
+	public GameObject shootPrefab;
 
 	// Use this for initialization
 	void Start () {
-		UnitActionType.init(highlighterManager);
+		UnitActionType.init(highlighterManager, shootPrefab);
 		UnitActionType.WALK.Icon = moveIcon;
 		UnitActionType.SHOOT.Icon = shootIcon;
 
@@ -82,8 +83,13 @@ public class UnitManager : MonoBehaviour {
 		return true;
 	}
 
-	public void onEndTurn() {
+	public void onEndTurn(int lastPlayer, int nextPlayer) {
 		SelectedUnit = null;
+	}
+
+	public void updateStatsGUI(Unit unit) {
+		apText.text = string.Format("{0}/{1}", unit.Ap, unit.MaxAP);
+		healthText.text = string.Format("{0}/{1}", unit.Health, unit.MaxHealth);
 	}
 
 	public Unit SelectedUnit {
@@ -99,17 +105,24 @@ public class UnitManager : MonoBehaviour {
 			
 			if(value != null) {
 				unitNameText.text = value.Type.Name;
-				apText.text = string.Format("{0}/{1}", value.Ap, value.MaxAP);
-				healthText.text = string.Format("{0}/{1}", value.Health, value.MaxHealth);
+				updateStatsGUI(value);
 				highlighterManager.setState(value.Position.x, value.Position.y, HighlighterState.SELECTED);
 			} else {
 				unitNameText.text = "No Unit Selected";
 				apText.text = "-";
 				healthText.text = "-";
 			}
+
+			if(selectedUnit != null) {
+				selectedUnit.statsEvent -= updateStatsGUI;
+			}
 			
 			selectedUnit = value;
 			actionManager.unitSelected(value);
+
+			if(selectedUnit != null) {
+				selectedUnit.statsEvent += updateStatsGUI;
+			}
 		}
 	}
 }

@@ -18,9 +18,44 @@ public class StickyCamera : MonoBehaviour {
 	/// </summary>
 	public bool lockCamera = false;
 
+	public PlayerManager playerManager;
+
+	private Vector3[] lastPosition;
+	private Quaternion[] lastRotation;
+
 	// Use this for initialization
 	void Start () {
+		if(playerManager != null) {
+			lastPosition = new Vector3[playerManager.playerCount];
+			lastRotation = new Quaternion[playerManager.playerCount];
+
+			//Initialize cameras with current position
+			for(int i = 0; i < playerManager.playerCount; i++) {
+				lastPosition[i] = transform.parent.position;
+				lastRotation[i] = transform.parent.rotation;
+			}
+		}
+	}
+
+	void OnEnable() {
+		PlayerManager.endTurnEvent += endTurn;
+	}
 	
+	void OnDisable() {
+		PlayerManager.endTurnEvent -= endTurn;
+	}
+
+	void endTurn(int lastPlayer, int nextPlayer) {
+		if(playerManager == null)
+			return;
+
+		//save current camera
+		lastPosition[lastPlayer-1] = transform.parent.position;
+		lastRotation[lastPlayer-1] = transform.parent.rotation;
+
+		//load camera for next player
+		transform.parent.position = lastPosition[nextPlayer-1];
+		transform.parent.rotation = lastRotation[nextPlayer-1];
 	}
 	
 	// Update is called once per frame

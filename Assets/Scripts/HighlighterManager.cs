@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 public enum HighlighterState {
-	HIDDEN, SELECTED, WALKABLE, ENEMY
+	HIDDEN, SELECTED, WALKABLE, ENEMY, ATTACKABLE
 }
 
 public class HighlighterManager : MonoBehaviour {
@@ -10,6 +10,7 @@ public class HighlighterManager : MonoBehaviour {
 	public Material selectedMaterial;
 	public Material walkableMaterial;
 	public Material enemyMaterial;
+	public Material attackableMaterial;
 
 	public GameObject highligherPrefab;
 
@@ -85,6 +86,9 @@ public class HighlighterManager : MonoBehaviour {
 				break;
 			case HighlighterState.WALKABLE:
 				meshRenderer.material = walkableMaterial;
+				break;
+			case HighlighterState.ATTACKABLE:
+				meshRenderer.material = attackableMaterial;
 				break;
 			default:
 				break;

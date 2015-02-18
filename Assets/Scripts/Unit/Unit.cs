@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public abstract class Unit {
+	public delegate void statsChanged(Unit unit);
+	public event statsChanged statsEvent;
+
 	protected int maxAP;
 	protected int ap;
 	protected float maxHealth;
@@ -71,8 +74,9 @@ public abstract class Unit {
 		gameObject = null;
 	}
 
-	public void onEndTurn() {
-		nextTurn();
+	public void onEndTurn(int lastPlayer, int nextPlayer) {
+		if(nextPlayer == team)
+			nextTurn();
 	}
 
 	public bool moveToTile(Vector2i target, Vector2i[] path) {
@@ -117,6 +121,10 @@ public abstract class Unit {
 		}
 		set {
 			ap = value;
+
+			if(statsEvent != null) {
+				statsEvent(this);
+			}
 		}
 	}
 
@@ -132,6 +140,10 @@ public abstract class Unit {
 		}
 		set {
 			health = value;
+
+			if(statsEvent != null) {
+				statsEvent(this);
+			}
 		}
 	}
 
