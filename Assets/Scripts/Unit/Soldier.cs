@@ -5,6 +5,8 @@ public class Soldier : Unit {
 		//TODO add actions
 
 		defaultFloorAction = UnitActionType.WALK.createAction(this);
+
+		actions = new UnitAction[]{defaultFloorAction};
 	}
 }
 

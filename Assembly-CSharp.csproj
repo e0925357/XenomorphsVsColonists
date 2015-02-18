@@ -66,6 +66,7 @@
      <Compile Include="Assets\Scripts\Tile\TileType.cs" />
      <Compile Include="Assets\Scripts\Tile\VentShaft.cs" />
      <Compile Include="Assets\Scripts\Tile\Wall.cs" />
+     <Compile Include="Assets\Scripts\Unit\ActionManager.cs" />
      <Compile Include="Assets\Scripts\Unit\Soldier.cs" />
      <Compile Include="Assets\Scripts\Unit\Unit.cs" />
      <Compile Include="Assets\Scripts\Unit\UnitAction.cs" />

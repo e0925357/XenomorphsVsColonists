@@ -10,14 +10,20 @@ public class UnitManager : MonoBehaviour {
 
 	public HighlighterManager highlighterManager;
 	public PlayerManager playerManager;
+	public ActionManager actionManager;
 	
 	public Text unitNameText;
 	public Text apText;
 	public Text healthText;
 
+	public Sprite moveIcon;
+	public Sprite shootIcon;
+
 	// Use this for initialization
 	void Start () {
 		UnitActionType.init(highlighterManager);
+		UnitActionType.WALK.Icon = moveIcon;
+		UnitActionType.SHOOT.Icon = shootIcon;
 
 		GameObject go = GameObject.Find("GameBoard");
 		gameBoard = go.GetComponent<GameBoard>();
@@ -96,10 +102,6 @@ public class UnitManager : MonoBehaviour {
 				apText.text = string.Format("{0}/{1}", value.Ap, value.MaxAP);
 				healthText.text = string.Format("{0}/{1}", value.Health, value.MaxHealth);
 				highlighterManager.setState(value.Position.x, value.Position.y, HighlighterState.SELECTED);
-
-				if(value.DefaultFloorAction != null) {
-					value.DefaultFloorAction.actionSelected();
-				}
 			} else {
 				unitNameText.text = "No Unit Selected";
 				apText.text = "-";
@@ -107,6 +109,7 @@ public class UnitManager : MonoBehaviour {
 			}
 			
 			selectedUnit = value;
+			actionManager.unitSelected(value);
 		}
 	}
 }

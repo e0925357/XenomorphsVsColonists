@@ -1,13 +1,15 @@
-
+using UnityEngine;
 
 public class UnitActionType {
 
 	public static readonly UnitActionType WALK = new UnitActionType(0, "walk");
+	public static readonly UnitActionType SHOOT = new UnitActionType(1, "shoot");
 
 	private static HighlighterManager highlighterManager = null;
 
 	private readonly int id;
 	private readonly string name;
+	private Sprite icon;
 
 	public static void init(HighlighterManager highlighterManager) {
 		UnitActionType.highlighterManager = highlighterManager;
@@ -47,6 +49,22 @@ public class UnitActionType {
 	public override int GetHashCode() {
 		unchecked {
 			return id.GetHashCode();
+		}
+	}
+
+	public Sprite Icon {
+		get {
+			return this.icon;
+		}
+
+		set {
+			icon = value;
+		}
+	}
+
+	public string Name {
+		get {
+			return this.name;
 		}
 	}
 }
