@@ -5,7 +5,8 @@ public class Xenomorph : Unit {
 		//TODO add actions
 
 		defaultFloorAction = UnitActionType.WALK.createAction(this);
+		defaultEnemyAction = UnitActionType.SLASH.createAction(this);
 		
-		actions = new UnitAction[]{defaultFloorAction};
+		actions = new UnitAction[]{defaultFloorAction, defaultEnemyAction};
 	}
 }

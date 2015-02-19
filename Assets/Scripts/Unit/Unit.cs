@@ -5,6 +5,9 @@ public abstract class Unit {
 	public delegate void statsChanged(Unit unit);
 	public event statsChanged statsEvent;
 
+	public delegate void death(Unit unit);
+	public event statsChanged onDeathEvent;
+
 	protected int maxAP;
 	protected int ap;
 	protected float maxHealth;
@@ -143,6 +146,10 @@ public abstract class Unit {
 
 			if(statsEvent != null) {
 				statsEvent(this);
+			}
+
+			if(health <= 0 && onDeathEvent != null)  {
+				onDeathEvent(this);
 			}
 		}
 	}

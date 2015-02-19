@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class UnitManager : MonoBehaviour {
 
 	private GameBoard gameBoard;
 	private Unit selectedUnit = null;
 	private Unit[,] unitField;
+
+	private List<Unit> activeUnits = new List<Unit>();
 
 	public HighlighterManager highlighterManager;
 	public PlayerManager playerManager;
@@ -18,13 +20,16 @@ public class UnitManager : MonoBehaviour {
 
 	public Sprite moveIcon;
 	public Sprite shootIcon;
+	public Sprite slashIcon;
 	public GameObject shootPrefab;
+	public GameObject slashPrefab;
 
 	// Use this for initialization
 	void Start () {
-		UnitActionType.init(highlighterManager, shootPrefab);
+		UnitActionType.init(highlighterManager, shootPrefab, slashPrefab);
 		UnitActionType.WALK.Icon = moveIcon;
 		UnitActionType.SHOOT.Icon = shootIcon;
+		UnitActionType.SLASH.Icon = slashIcon;
 
 		GameObject go = GameObject.Find("GameBoard");
 		gameBoard = go.GetComponent<GameBoard>();
@@ -35,17 +40,20 @@ public class UnitManager : MonoBehaviour {
 
 		foreach(Vector2i roomPos in gameBoard.rooms) {
 			Tile roomTile = gameBoard.tiles[roomPos.x, roomPos.y];
+			Unit createdUnit = null;
 
 			if(roomTile.Type == TileType.LAB) {
 				//Create soldier
-				unitField[roomPos.x, roomPos.y] = UnitType.SOLDIER.createUnit(roomPos.x, roomPos.y);
-				unitField[roomPos.x, roomPos.y].createGameObject();
+				createdUnit = UnitType.SOLDIER.createUnit(roomPos.x, roomPos.y);
 
 			} else if(!alienCreated && roomTile.Type ==TileType.MINE) {
 				//Create Xenomorph
-				unitField[roomPos.x, roomPos.y] = UnitType.XENO.createUnit(roomPos.x, roomPos.y);
-				unitField[roomPos.x, roomPos.y].createGameObject();
+				createdUnit = UnitType.XENO.createUnit(roomPos.x, roomPos.y);
 				alienCreated = true;
+			}
+
+			if(createdUnit != null) {
+				registerUnit(createdUnit);
 			}
 		}
 	}
@@ -69,6 +77,39 @@ public class UnitManager : MonoBehaviour {
 		}
 
 		return unitField[pos.x, pos.y];
+	}
+
+	public bool registerUnit(Unit newUnit) {
+		if(unitField[newUnit.Position.x, newUnit.Position.y] != null) {
+			return false;
+		}
+
+		unitField[newUnit.Position.x, newUnit.Position.y] = newUnit;
+		newUnit.createGameObject();
+		newUnit.onDeathEvent += onUnitDeath;
+		activeUnits.Add(newUnit);
+
+		return true;
+	}
+
+	public void onUnitDeath(Unit unit) {
+		activeUnits.Remove(unit);
+
+		if(SelectedUnit == unit) {
+			SelectedUnit = null;
+		}
+
+		unitField[unit.Position.x, unit.Position.y] = null;
+		unit.destroyGameObject();
+
+		foreach(Unit activeUnit in activeUnits) {
+			if(activeUnit.Team == unit.Team) {
+				return;
+			}
+		}
+
+		//player destroyed
+		playerManager.playerLost(unit.Team);
 	}
 
 	public bool moveUnit(Vector2i fromPos, Vector2i toPos) {

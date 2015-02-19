@@ -24,7 +24,7 @@ public class ShootAction : UnitAction {
 	}
 
 	public override void doAction (Vector2i position) {
-		Debug.LogWarning("Can't do MoveAction @ position");
+		Debug.LogWarning("Can't do ShootAction @ position");
 	}
 
 	public override void doAction (Unit target) {

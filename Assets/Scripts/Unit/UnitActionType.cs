@@ -4,17 +4,20 @@ public class UnitActionType {
 
 	public static readonly UnitActionType WALK = new UnitActionType(0, "walk");
 	public static readonly UnitActionType SHOOT = new UnitActionType(1, "shoot");
+	public static readonly UnitActionType SLASH = new UnitActionType(2, "slash");
 
 	private static HighlighterManager highlighterManager = null;
 	private static GameObject shootPrefab = null;
+	private static GameObject slashPrefab = null;
 
 	private readonly int id;
 	private readonly string name;
 	private Sprite icon;
 
-	public static void init(HighlighterManager highlighterManager, GameObject shootPrefab) {
+	public static void init(HighlighterManager highlighterManager, GameObject shootPrefab, GameObject slashPrefab) {
 		UnitActionType.highlighterManager = highlighterManager;
 		UnitActionType.shootPrefab = shootPrefab;
+		UnitActionType.slashPrefab = slashPrefab;
 	}
 
 
@@ -29,6 +32,8 @@ public class UnitActionType {
 			return new UnitMoveAction(unit, highlighterManager);
 		case 1:
 			return new ShootAction(unit, highlighterManager, shootPrefab);
+		case 2:
+			return new SlashAction(unit, highlighterManager, slashPrefab);
 		default:
 			return null;
 		}

@@ -6,6 +6,8 @@ public class PlayerManager : MonoBehaviour {
 	public delegate void onEndTurn(int lastPlayer, int nextPlayer);
 	public static event onEndTurn endTurnEvent;
 
+	public static int winningPlayer = 0;
+
 
 	public int currentPlayer = 1;
 	public int playerCount = 2;
@@ -31,5 +33,10 @@ public class PlayerManager : MonoBehaviour {
 
 		nextPlayerText.text = "Player " + nextPlayer;
 		currentPlayer = nextPlayer;
+	}
+
+	public void playerLost(int player) {
+		winningPlayer = (player)%2 + 1;
+		Application.LoadLevel("WinScreen");
 	}
 }
