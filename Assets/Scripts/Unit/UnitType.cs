@@ -40,7 +40,7 @@ public class UnitType {
 	public Unit createUnit(int x, int y) {
 		switch(id) {
 		case 0:
-			return null;
+			return new Colonist(new Vector2i(x, y), playerManager, unitManager);
 		case 1:
 			return new Soldier(new Vector2i(x, y), playerManager, unitManager);
 		case 2:

@@ -27,6 +27,12 @@ public class TilePrefabLibrary : MonoBehaviour {
 	public GameObject AirPurePrefab;
 	public GameObject AirPureP_Prefab;
 
+	public GameObject ArmoryPrefab;
+	public GameObject ArmoryP_Prefab;
+
+	public GameObject QuatersPrefab;
+	public GameObject QuatersP_Prefab;
+
 	public void initTileType(GameBoard gameBoard) {
 		TileType.init(gameBoard);
 
@@ -53,14 +59,11 @@ public class TilePrefabLibrary : MonoBehaviour {
 		
 		TileType.AIR.Prefab = AirPurePrefab;
 		TileType.AIR.PreviewPrefab = AirPureP_Prefab;
-	}
 
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		TileType.ARMORY.Prefab = ArmoryPrefab;
+		TileType.ARMORY.PreviewPrefab = ArmoryP_Prefab;
+
+		TileType.QUATERS.Prefab = QuatersPrefab;
+		TileType.QUATERS.PreviewPrefab = QuatersP_Prefab;
 	}
 }

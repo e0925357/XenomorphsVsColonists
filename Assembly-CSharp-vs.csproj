@@ -54,10 +54,13 @@
      <Compile Include="Assets\Scripts\PlaceScript.cs" />
      <Compile Include="Assets\Scripts\PlayerManager.cs" />
      <Compile Include="Assets\Scripts\StickyCamera.cs" />
+     <Compile Include="Assets\Scripts\Tile\AirPrurifacator.cs" />
+     <Compile Include="Assets\Scripts\Tile\Armory.cs" />
      <Compile Include="Assets\Scripts\Tile\CableShaft.cs" />
      <Compile Include="Assets\Scripts\Tile\Floor.cs" />
      <Compile Include="Assets\Scripts\Tile\Laboratory.cs" />
      <Compile Include="Assets\Scripts\Tile\Mine.cs" />
+     <Compile Include="Assets\Scripts\Tile\Quaters.cs" />
      <Compile Include="Assets\Scripts\Tile\Reactor.cs" />
      <Compile Include="Assets\Scripts\Tile\Tile.cs" />
      <Compile Include="Assets\Scripts\Tile\TileData.cs" />
@@ -67,6 +70,7 @@
      <Compile Include="Assets\Scripts\Tile\VentShaft.cs" />
      <Compile Include="Assets\Scripts\Tile\Wall.cs" />
      <Compile Include="Assets\Scripts\Unit\ActionManager.cs" />
+     <Compile Include="Assets\Scripts\Unit\Colonist.cs" />
      <Compile Include="Assets\Scripts\Unit\ShootAction.cs" />
      <Compile Include="Assets\Scripts\Unit\SlashAction.cs" />
      <Compile Include="Assets\Scripts\Unit\Soldier.cs" />

@@ -42,10 +42,14 @@ public class UnitManager : MonoBehaviour {
 			Tile roomTile = gameBoard.tiles[roomPos.x, roomPos.y];
 			Unit createdUnit = null;
 
-			if(roomTile.Type == TileType.LAB) {
+			if(roomTile.Type == TileType.ARMORY) {
 				//Create soldier
 				createdUnit = UnitType.SOLDIER.createUnit(roomPos.x, roomPos.y);
 
+			} else if(roomTile.Type ==TileType.QUATERS) {
+				//Create Xenomorph
+				createdUnit = UnitType.COLONIST.createUnit(roomPos.x, roomPos.y);
+				alienCreated = true;
 			} else if(!alienCreated && roomTile.Type ==TileType.MINE) {
 				//Create Xenomorph
 				createdUnit = UnitType.XENO.createUnit(roomPos.x, roomPos.y);

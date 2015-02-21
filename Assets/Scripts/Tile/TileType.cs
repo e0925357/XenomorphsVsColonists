@@ -11,11 +11,13 @@ public class TileType {
 	public static readonly TileType REACTOR = new TileType(5, "Reactor");
 	public static readonly TileType AIR = new TileType(6, "Air Purification");
 	public static readonly TileType MINE = new TileType(7, "Mine");
+	public static readonly TileType ARMORY = new TileType(8, "Armory");
+	public static readonly TileType QUATERS = new TileType(9, "Quaters");
 
 	private static GameBoard gameBoard = null;
 
 	static TileType() {
-		instances = new TileType[]{WALL, FLOOR, CABLE, VENT, LAB, REACTOR, AIR, MINE};
+		instances = new TileType[]{WALL, FLOOR, CABLE, VENT, LAB, REACTOR, AIR, MINE, ARMORY, QUATERS};
 	}
 
 	public static TileType getById(int id) {
@@ -55,9 +57,13 @@ public class TileType {
 		case 5:
 			return new Reactor(x, y, gameBoard);
 		case 6:
-			return null;
+			return new AirPrurifacator(x, y, gameBoard);
 		case 7:
 			return new Mine(x, y, gameBoard);
+		case 8:
+			return new Armory(x, y, gameBoard);
+		case 9:
+			return new Quaters(x, y, gameBoard);
 		default:
 			return null;
 		}
