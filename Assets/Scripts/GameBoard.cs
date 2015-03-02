@@ -10,6 +10,11 @@ public class GameBoard : MonoBehaviour {
 	public TilePrefabLibrary tilePrefabLibrary;
 	public HighlighterManager highlighterManager;
 
+	public Transform leftPeremiter;
+	public Transform rightPeremiter;
+	public Transform upperPeremiter;
+	public Transform lowerPeremiter;
+
 	// Use this for initialization
 	void Start() {
 		tilePrefabLibrary.initTileType(this);
@@ -25,6 +30,12 @@ public class GameBoard : MonoBehaviour {
 				tiles[x,y].createGameObject(true);
 			}
 		}
+
+		rightPeremiter.localScale = leftPeremiter.localScale = new Vector3(1, 1, sizeY);
+		upperPeremiter.localScale = lowerPeremiter.localScale = new Vector3(sizeX, 1, 1);
+
+		rightPeremiter.localPosition = new Vector3(sizeX*2 - 2, 0, 0);
+		upperPeremiter.localPosition = new Vector3(0, 0, sizeY*2 - 2);
 	}
 	
 	// Update is called once per frame
