@@ -3,16 +3,16 @@ using UnityEngine;
 public class TileType {
 	private static readonly TileType[] instances;
 
-	public static readonly TileType WALL = new TileType(0, "Wall");
-	public static readonly TileType FLOOR = new TileType(1, "Floor");
-	public static readonly TileType CABLE = new TileType(2, "Cable Shaft");
-	public static readonly TileType VENT = new TileType(3, "Ventilation Shaft");
-	public static readonly TileType LAB = new TileType(4, "Laboratory");
-	public static readonly TileType REACTOR = new TileType(5, "Reactor");
-	public static readonly TileType AIR = new TileType(6, "Air Purification");
-	public static readonly TileType MINE = new TileType(7, "Mine");
-	public static readonly TileType ARMORY = new TileType(8, "Armory");
-	public static readonly TileType QUATERS = new TileType(9, "Quaters");
+	public static readonly TileType WALL = new TileType(0, "Wall", false, false);
+	public static readonly TileType FLOOR = new TileType(1, "Floor", false, true);
+	public static readonly TileType CABLE = new TileType(2, "Cable Shaft", false, true);
+	public static readonly TileType VENT = new TileType(3, "Ventilation Shaft", false, true);
+	public static readonly TileType LAB = new TileType(4, "Laboratory", true, false);
+	public static readonly TileType REACTOR = new TileType(5, "Reactor", true, false);
+	public static readonly TileType AIR = new TileType(6, "Air Purification", true, false);
+	public static readonly TileType MINE = new TileType(7, "Mine", true, false);
+	public static readonly TileType ARMORY = new TileType(8, "Armory", true, false);
+	public static readonly TileType QUATERS = new TileType(9, "Quaters", true, false);
 
 	private static GameBoard gameBoard = null;
 
@@ -36,10 +36,14 @@ public class TileType {
 	private readonly string name;
 	private GameObject prefab;
 	private GameObject previewPrefab;
+	private bool isRoom;
+	private bool isTransporter;
 
-	private TileType(int id, string name) {
+	private TileType(int id, string name, bool isRoom, bool isTransporter) {
 		this.id = id;
 		this.name = name;
+		this.isRoom = isRoom;
+		this.isTransporter = isTransporter;
 	}
 
 	public Tile createTile(int x, int y) {
@@ -90,6 +94,18 @@ public class TileType {
 		}
 		set {
 			previewPrefab = value;
+		}
+	}
+
+	public bool IsRoom {
+		get {
+			return this.isRoom;
+		}
+	}
+
+	public bool IsTransporter {
+		get {
+			return this.isTransporter;
 		}
 	}
 

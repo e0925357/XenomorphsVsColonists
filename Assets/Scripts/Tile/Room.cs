@@ -28,8 +28,7 @@ public abstract class Room : Tile {
 				
 				if(neighbourTile.Type == TileType.WALL) continue;
 				
-				if(neighbourTile.Type == TileType.FLOOR || neighbourTile.Type == TileType.VENT
-				   || neighbourTile.Type == TileType.CABLE) {
+				if(neighbourTile.Type.IsTransporter) {
 				
 					Vector2i[] nnOffsets = null;
 					
@@ -47,19 +46,18 @@ public abstract class Room : Tile {
 					if(nnOffsets != null) {
 						//Check neighbours of neighbours for equal types
 						for(int i = 0; i < nnOffsets.Length; i++) {
-							if(!gameboard.isInside(nnOffsets[i].x, nnOffsets[i].y)) {
+							if(!gameboard.isInside(nnOffsets[i].x + x1, nnOffsets[i].y + y1)) {
 								continue;
 							}
 							
-							Tile nnTile = gameboard.tiles[nnOffsets[i].x, nnOffsets[i].y];
+							Tile nnTile = gameboard.tiles[nnOffsets[i].x + x1, nnOffsets[i].y + y1];
 							
 							if(nnTile.Type == neighbourTile.Type) {
 								return false;
 							}
 						}
 					}
-				} else {
-					//No walls, no moveable tiles -> it has to be a room
+				} else if(neighbourTile.Type.IsRoom) {
 					return false;
 				}
 			}

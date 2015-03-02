@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class CableShaft : Tile {
-	public CableShaft(int x, int y, GameBoard gb) : base(TileType.CABLE, 0, gb, x, y) {
+public class CableShaft : Transporters {
+	public CableShaft(int x, int y, GameBoard gb) : base(TileType.CABLE, gb, x, y) {
 	}
 	
 	public override void receiveEvent (TileEvent eventId, int originX, int originY) {

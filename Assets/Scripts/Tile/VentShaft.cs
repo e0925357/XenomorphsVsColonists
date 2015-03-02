@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class VentShaft : Tile {
-	public VentShaft(int x, int y, GameBoard gb) : base(TileType.VENT, 0, gb, x, y) {
+public class VentShaft : Transporters {
+	public VentShaft(int x, int y, GameBoard gb) : base(TileType.VENT, gb, x, y) {
 	}
 	
 	public override void receiveEvent (TileEvent eventId, int originX, int originY) {
