@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class Laboratory : Tile {
+public class Laboratory : Room {
 	
-	public Laboratory(int x, int y, GameBoard gb) : base(TileType.LAB, 0, gb, x, y, 6, 6) {
+	public Laboratory(int x, int y, GameBoard gb) : base(TileType.LAB, gb, x, y, 6, 6) {
 	}
 	
-	public override void receiveEvent (TileEvent eventId, int originX, int originY) {
-		//do nothing
+	protected override void receiveEventHook (TileEvent eventId, int originX, int originY) {
+		//Do nothing
 	}
 }

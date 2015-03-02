@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class Mine : Tile {
+public class Mine : Room {
 	
-	public Mine(int x, int y, GameBoard gb) : base(TileType.MINE, 0, gb, x, y, 6, 6) {
+	public Mine(int x, int y, GameBoard gb) : base(TileType.MINE, gb, x, y, 6, 6) {
 	}
 	
-	public override void receiveEvent (TileEvent eventId, int originX, int originY) {
-		//do nothing
+	protected override void receiveEventHook (TileEvent eventId, int originX, int originY) {
+		//Do nothing
 	}
 }

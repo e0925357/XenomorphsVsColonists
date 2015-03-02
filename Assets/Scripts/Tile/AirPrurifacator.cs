@@ -1,11 +1,11 @@
 
-public class AirPrurifacator : Tile {
+public class AirPrurifacator : Room {
 
-	public AirPrurifacator(int x, int y, GameBoard gb) : base(TileType.AIR, 0, gb, x, y, 6, 6) {
+	public AirPrurifacator(int x, int y, GameBoard gb) : base(TileType.AIR, gb, x, y, 6, 6) {
 	}
 
-	public override void receiveEvent (TileEvent eventId, int originX, int originY) {
-		//do nothing
+	protected override void receiveEventHook (TileEvent eventId, int originX, int originY) {
+		//Do nothing
 	}
 }
 
