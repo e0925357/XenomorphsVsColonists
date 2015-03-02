@@ -15,12 +15,16 @@ public class BreadthFirstSearch {
 		unitManager = GameObject.Find("UnitManager").GetComponent<UnitManager>();
 	}
 
-	public SearchResult searchReagion(Vector2i startField, int maxSteps, bool ignoreUnits, HashSet<TileType> walkableTiles) {
+	public SearchResult searchReagion(Vector2i startField, float maxSteps, bool ignoreUnits, HashSet<TileType> walkableTiles) {
+		return searchReagion(startField, maxSteps, ignoreUnits, walkableTiles, null);
+	}
+
+	public SearchResult searchReagion(Vector2i startField, float maxSteps, bool ignoreUnits, HashSet<TileType> walkableTiles, Dictionary<TileType, float> costMap) {
 		openList.Clear();
 		visitedSet.Clear();
 
-		openList.Enqueue(new SearchStep(startField, null));
-		visitedSet.Add(new SearchStep(startField, null));
+		openList.Enqueue(new SearchStep(startField, null, 1));
+		visitedSet.Add(new SearchStep(startField, null, 1));
 
 		SearchResult result = new SearchResult();
 
@@ -33,10 +37,24 @@ public class BreadthFirstSearch {
 
 			foreach(Vector2i offsetVec in neighbourOffsets) {
 				Vector2i neighbourPosition = currentStep.Position + offsetVec;
-				SearchStep neighbourStep = new SearchStep(neighbourPosition, currentStep);
 
-				if(neighbourStep.Step > maxSteps || visitedSet.Contains(neighbourStep) || !gameBoard.isInside(neighbourStep.Position.x, neighbourStep.Position.y) ||
-				   !walkableTiles.Contains(gameBoard.tileTypes[neighbourStep.Position.x, neighbourStep.Position.y]) ||
+				if(!gameBoard.isInside(neighbourPosition.x, neighbourPosition.y)) {
+					continue;
+				}
+
+				TileType neighbourTile = gameBoard.tileTypes[neighbourPosition.x, neighbourPosition.y];
+				float stepWeight;
+
+				if(costMap == null || !costMap.ContainsKey(neighbourTile)) {
+					stepWeight = 1;
+				} else {
+					stepWeight = costMap[neighbourTile];
+				}
+
+				SearchStep neighbourStep = new SearchStep(neighbourPosition, currentStep, stepWeight);
+
+				if(neighbourStep.Step > maxSteps || visitedSet.Contains(neighbourStep) ||
+				   !walkableTiles.Contains(neighbourTile) ||
 				   !ignoreUnits && unitManager.getUnit(neighbourPosition) != null) continue;
 
 				visitedSet.Add(neighbourStep);
@@ -64,16 +82,16 @@ public class BreadthFirstSearch {
 class SearchStep {
 	private Vector2i position;
 	private SearchStep lastStep;
-	private int step;
+	private float step;
 
-	public SearchStep(Vector2i position, SearchStep lastStep) {
+	public SearchStep(Vector2i position, SearchStep lastStep, float stepWeight) {
 		this.position = position;
 		this.lastStep = lastStep;
 
 		if(lastStep == null) {
 			step = 0;
 		} else {
-			step = lastStep.Step + 1;
+			step = lastStep.Step + stepWeight;
 		}
 	}
 
@@ -89,7 +107,7 @@ class SearchStep {
 		}
 	}
 
-	public int Step {
+	public float Step {
 		get {
 			return this.step;
 		}

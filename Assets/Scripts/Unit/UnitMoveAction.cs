@@ -27,7 +27,7 @@ public class UnitMoveAction : UnitAction {
 				Debug.LogWarning("Unit " + unit + " can't move to " + position + ": Action denied!");
 			} else {
 				unit.Ap -= cost;
-				actionSelected();
+				highlighterManager.clearSelection();
 			}
 		} else {
 			Debug.LogWarning("Unit " + unit + " can't move to " + position + ": No such path exists!");

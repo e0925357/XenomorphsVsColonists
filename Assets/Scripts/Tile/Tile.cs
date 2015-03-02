@@ -101,6 +101,14 @@ public abstract class Tile {
 		}
 	}
 
+	public TileData TileData {
+		get {
+			if(gObject == null) return null;
+			
+			return gObject.GetComponent<TileData>();
+		}
+	}
+
 	public override string ToString() {
 		return string.Format("[Tile: type={0}, orientation={1}, x={2}, y={3}]", type, orientation, x, y);
 	}

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class UnitManager : MonoBehaviour {
 
+	public delegate void unitMoved(Unit unit);
+	public static event unitMoved unitMovedEvent;
+
 	private GameBoard gameBoard;
 	private Unit selectedUnit = null;
 	private Unit[,] unitField;
@@ -60,11 +63,6 @@ public class UnitManager : MonoBehaviour {
 				registerUnit(createdUnit);
 			}
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 
 	void OnEnable() {
@@ -125,6 +123,29 @@ public class UnitManager : MonoBehaviour {
 		unitField[toPos.x, toPos.y] = unitField[fromPos.x, fromPos.y];
 		unitField[fromPos.x, fromPos.y] = null;
 
+		unitField[toPos.x, toPos.y].Position = toPos;
+
+		if(unitMovedEvent != null) {
+			unitMovedEvent(unitField[toPos.x, toPos.y]);
+		}
+
+		return true;
+	}
+
+	public bool isPathClear(Vector2i[] path, int startIndex = 0) {
+		for(int i = startIndex; i < path.Length; i++) {
+			Vector2i pos = path[i];
+
+			if(!gameBoard.isInside(pos.x, pos.y)) {
+				return false;
+			}
+
+			if(unitField[pos.x, pos.y] != null) {
+				return false;
+			}
+
+		}
+		
 		return true;
 	}
 
@@ -168,6 +189,12 @@ public class UnitManager : MonoBehaviour {
 			if(selectedUnit != null) {
 				selectedUnit.statsEvent += updateStatsGUI;
 			}
+		}
+	}
+
+	public List<Unit> ActiveUnits {
+		get {
+			return this.activeUnits;
 		}
 	}
 }

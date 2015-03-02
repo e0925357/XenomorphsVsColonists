@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\CameraFacingBillboard.cs" />
+     <Compile Include="Assets\Scripts\FogManager.cs" />
      <Compile Include="Assets\Scripts\GameBoard.cs" />
      <Compile Include="Assets\Scripts\HighlighterData.cs" />
      <Compile Include="Assets\Scripts\HighlighterManager.cs" />
@@ -94,7 +95,10 @@
      <Compile Include="Assets\Scripts\animations\ScaleAnimation.cs" />
      <Compile Include="Assets\Scripts\animations\TranslationAnimation.cs" />
      <Compile Include="Assets\Scripts\path\BreadthFirstSearch.cs" />
+     <Compile Include="Assets\Scripts\path\LineDrawer.cs" />
+     <Compile Include="Assets\Scripts\path\RoundToNearestLineDrawer.cs" />
      <Compile Include="Assets\Scripts\path\SearchResult.cs" />
+     <Compile Include="Assets\Scripts\path\ThickLineDrawer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Programme/Unity-Editor/Data/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
  </Reference>

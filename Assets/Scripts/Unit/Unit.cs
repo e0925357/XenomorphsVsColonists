@@ -12,6 +12,7 @@ public abstract class Unit {
 	protected int ap;
 	protected float maxHealth;
 	protected float health;
+	protected float maxSight;
 
 	protected UnitType type;
 
@@ -33,11 +34,12 @@ public abstract class Unit {
 	protected PlayerManager playerManager;
 	protected UnitManager unitManager;
 
-	public Unit(int maxAP, float maxHealth, UnitType type, int team, Vector2i position, TileType[] walkableTiles, PlayerManager playerManager, UnitManager unitManager) {
+	public Unit(int maxAP, float maxHealth, float maxSight, UnitType type, int team, Vector2i position, TileType[] walkableTiles, PlayerManager playerManager, UnitManager unitManager) {
 		this.maxAP = maxAP;
 		ap = maxAP;
 		this.maxHealth = maxHealth;
 		health = maxHealth;
+		this.maxSight = maxSight;
 		this.type = type;
 		this.team = team;
 		this.position = position;
@@ -86,8 +88,7 @@ public abstract class Unit {
 		if(path == null || path.Length <= 0)
 			throw new System.ArgumentNullException("path");
 
-		if(unitManager.moveUnit(position, target)) {
-			position = target;
+		if(unitManager.isPathClear(path, 1)) {
 			PathToWalk = path;
 
 			return true;
@@ -102,7 +103,13 @@ public abstract class Unit {
 	}
 
 	public void tileReached() {
+		unitManager.moveUnit(position, pathToWalk[nextPathIndex]);
+
 		nextPathIndex++;
+
+		if(nextPathIndex >= pathToWalk.Length && defaultFloorAction != null) {
+			defaultFloorAction.actionSelected();
+		}
 	}
 
 	public Vector2i? NextTile {
@@ -174,9 +181,7 @@ public abstract class Unit {
 			return this.position;
 		}
 		set {
-			if(unitManager.moveUnit(position, value)) {
-				position = value;
-			}
+			position = value;
 		}
 	}
 
@@ -222,4 +227,17 @@ public abstract class Unit {
 		}
 	}
 
+	public UnitData UnitData {
+		get {
+			if(gameObject == null) return null;
+			
+			return gameObject.transform.GetChild(0).GetComponent<UnitData>();
+		}
+	}
+
+	public float MaxSight {
+		get {
+			return this.maxSight;
+		}
+	}
 }

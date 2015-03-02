@@ -18,9 +18,4 @@ public class UnitAssetManager : MonoBehaviour {
 		UnitType.COLONIST.Prefab = colonistPrefab;
 		UnitType.SOLDIER.Prefab = soldierPrefab;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

@@ -68,4 +68,26 @@ public class UnitData : MonoBehaviour {
 			targetField = unit.NextTile;
 		}
 	}
+
+	public void setVisible(bool visible) {
+		setVisible(visible, transform);
+	}
+
+	private void setVisible(bool visible, Transform trans) {
+		MeshRenderer renderer = trans.GetComponent<MeshRenderer>();
+		
+		if(renderer != null) {
+			renderer.enabled = visible;
+		}
+
+		Collider collider = trans.collider;
+		
+		if(collider != null) {
+			collider.enabled = visible;
+		}
+		
+		for(int i = 0; i < trans.childCount; i++) {
+			setVisible(visible, trans.GetChild(i));
+		}
+	}
 }

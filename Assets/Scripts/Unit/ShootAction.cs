@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Scripts.path;
 
 public class ShootAction : UnitAction {
 	private BreadthFirstSearch bfs = new BreadthFirstSearch();
@@ -9,6 +10,9 @@ public class ShootAction : UnitAction {
 	private HashSet<TileType> shootableTiles = new HashSet<TileType>();
 	private GameBoard gameboard;
 	private GameObject rifleShotsPrefab;
+	private LineDrawer lineDrawer;
+
+	private bool tileShootable = true;
 
 	public ShootAction(Unit unit, HighlighterManager highlighterManager, GameObject rifleShotsPrefab) : base(true, false, 3, unit, UnitActionType.SHOOT, highlighterManager) {
 		this.range = 6;
@@ -21,6 +25,8 @@ public class ShootAction : UnitAction {
 		shootableTiles.Add(TileType.CABLE);
 		shootableTiles.Add(TileType.FLOOR);
 		shootableTiles.Add(TileType.VENT);
+
+		lineDrawer = new ThickLineDrawer(checkTile);
 	}
 
 	public override void doAction (Vector2i position) {
@@ -83,35 +89,18 @@ public class ShootAction : UnitAction {
 		}
 	}
 
-	private bool isTileShootable(Vector2i tilePos) {
-		
-		Vector2i deltaVector = tilePos - unit.Position;
-		Vector2i deltaSign = new Vector2i((int)Mathf.Sign(deltaVector.x), (int)Mathf.Sign(deltaVector.y));
-		float m = Mathf.Abs((float)deltaVector.y/(float)deltaVector.x);
-		
-		Vector2 currentPos = new Vector2(unit.Position.x, unit.Position.y);
-		bool horizontal = m < 1;
-		
-		int maxDelta = Mathf.Abs(horizontal ? deltaVector.x : deltaVector.y);
-		
-		for(int k = 0; k < maxDelta; k++) {
-			if(horizontal) {
-				currentPos.x += deltaSign.x;
-				currentPos.y += m*deltaSign.y;
-			} else {
-				currentPos.x += deltaSign.x/m;
-				currentPos.y += deltaSign.y;
-			}
-			
-			int x = (int)Mathf.Round(currentPos.x);
-			int y = (int)Mathf.Round(currentPos.y);
-			
-			if(!shootableTiles.Contains(gameboard.tileTypes[x,y])) {
-				return false;
-			}
+	public void checkTile(Vector2i tilePos) {
+		if(!shootableTiles.Contains(gameboard.tileTypes[tilePos.x,tilePos.y])) {
+			tileShootable = false;
 		}
+	}
 
-		return true;
+	private bool isTileShootable(Vector2i tilePos) {
+
+		tileShootable = true;
+		lineDrawer.drawLine(unit.Position, tilePos);
+
+		return tileShootable;
 	}
 }
 
