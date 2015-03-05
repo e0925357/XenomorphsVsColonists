@@ -13,7 +13,7 @@ public class SlashAction : UnitAction {
 		new Vector2i(-1,  0), new Vector2i( 0,  0), new Vector2i( 1,  0),
 		new Vector2i(-1, -1), new Vector2i( 0, -1), new Vector2i( 1, -1)};
 
-	public SlashAction(Unit unit, HighlighterManager highlighterManager, GameObject slashPrefab) : base(true, false, 4, unit, UnitActionType.SLASH, highlighterManager) {
+	public SlashAction(Unit unit, HighlighterManager highlighterManager, GameObject slashPrefab) : base(true, false, 3, unit, UnitActionType.SLASH, highlighterManager) {
 		gameboard = GameObject.Find("GameBoard").GetComponent<GameBoard>();
 		unitManager = GameObject.Find("UnitManager").GetComponent<UnitManager>();
 
