@@ -14,7 +14,7 @@ public class ShootAction : UnitAction {
 
 	private bool tileShootable = true;
 
-	public ShootAction(Unit unit, HighlighterManager highlighterManager, GameObject rifleShotsPrefab) : base(true, false, 3, unit, UnitActionType.SHOOT, highlighterManager) {
+	public ShootAction(Unit unit, HighlighterManager highlighterManager, GameObject rifleShotsPrefab) : base(true, false, 4, unit, UnitActionType.SHOOT, highlighterManager) {
 		this.range = 6;
 		this.rifleShotsPrefab = rifleShotsPrefab;
 		damage = 4;
