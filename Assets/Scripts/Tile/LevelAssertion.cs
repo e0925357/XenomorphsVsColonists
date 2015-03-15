@@ -32,15 +32,15 @@ public class LevelAssertion : MonoBehaviour {
 			 
 			if(roomTile.Type != TileType.AIR) {
 				//connected to air-purifictation?
-				if(!checkIfConnectedTo(TileType.AIR, airDucts, true)) {
-					assertionErrorList.Add(new LevelAssertionError("You must connect this room to an air-purificator!", LevelAssErrType.ROOM_CONNECTION));
+				if(!checkIfConnectedTo(roomTile, TileType.AIR, airDucts, true)) {
+					assertionErrorList.Add(new LevelAssertionError("You must connect this room to an air-purificator!", LevelAssErrType.ROOM_CONNECTION, roomTile));
 				}
 			}
 			
 			if(roomTile.Type == TileType.AIR || roomTile.Type == TileType.MINE) {
 				//connected to reactor?
-				if(!checkIfConnectedTo(TileType.REACTOR, powerDucts, true)) {
-					assertionErrorList.Add(new LevelAssertionError("You must connect this room to a reactor!", LevelAssErrType.ROOM_CONNECTION));
+				if(!checkIfConnectedTo(roomTile, TileType.REACTOR, powerDucts, true)) {
+					assertionErrorList.Add(new LevelAssertionError("You must connect this room to a reactor!", LevelAssErrType.ROOM_CONNECTION, roomTile));
 				}
 			}
 		}
@@ -53,13 +53,26 @@ public class LevelAssertion : MonoBehaviour {
 		}
 	}
 	
-	private bool checkIfConnectedTo(TileType target, TileType[] walkableTiles, bool skipOverOneFloor) {
+	private bool checkIfConnectedTo(Tile source, TileType target, TileType[] walkableTiles, bool skipOverOneFloor) {
+
+		for(int offX = -1; offX < source.Width; offX++) {
+			for(int offY = -1; offY < source.Height; offY++) {
+
+			}
+		}
+
 		return false;
 	}
 	
 	public bool IsLevelValid {
 		get {
 			return assertionErrorList.Count <= 0;
+		}
+	}
+
+	public List<LevelAssertionError> AssertionErrorList {
+		get {
+			return assertionErrorList;
 		}
 	}
 }
