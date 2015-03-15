@@ -3,8 +3,15 @@ using System.Collections.Generic;
 
 public class LevelAssertion : MonoBehaviour {
 	
-	private static readonly TileType[] airDucts = {TileType.VENT};
-	private static readonly TileType[] powerDucts = {TileType.CABLE};
+	private static readonly HashSet<TileType> airDucts = new HashSet<TileType>();
+	private static readonly HashSet<TileType> powerDucts = new HashSet<TileType>();
+	private static readonly Vector2i[] neighbourOffsets = {new Vector2i(1, 0), new Vector2i(0, 1), new Vector2i(-1, 0), new Vector2i(0, -1)};
+
+	static LevelAssertion() {
+		airDucts.Add(TileType.VENT);
+
+		powerDucts.Add(TileType.CABLE);
+	}
 
 
 	public GameBoard gameboard;
@@ -53,11 +60,59 @@ public class LevelAssertion : MonoBehaviour {
 		}
 	}
 	
-	private bool checkIfConnectedTo(Tile source, TileType target, TileType[] walkableTiles, bool skipOverOneFloor) {
+	private bool checkIfConnectedTo(Tile source, TileType target, HashSet<TileType> walkableTiles, bool skipOverOneFloor) {
 
-		for(int offX = -1; offX < source.Width; offX++) {
-			for(int offY = -1; offY < source.Height; offY++) {
+		for(int offX = -1; offX <= source.Width; offX++) {
+			for(int offY = -1; offY <= source.Height; offY++) {
+				int x = source.X + offX;
+				int y = source.Y + offY;
 
+				if(!gameboard.isInside(x,y) || offX != -1 && offX != source.Width &&  offY != -1 && offY != source.Height || offX == offY) continue;
+
+				TileType neighbourType = gameboard.tiles[x,y].Type;
+
+				if(!walkableTiles.Contains(neighbourType) && (neighbourType != TileType.FLOOR || !skipOverOneFloor)) continue;
+
+				if(checkIfConnectedTo(new Vector2i(x,y), target, walkableTiles, skipOverOneFloor)) return true;
+
+			}
+		}
+
+		return false;
+	}
+
+   private bool checkIfConnectedTo(Vector2i startPos, TileType target, HashSet<TileType> walkableTiles, bool skipOverOneFloor) {
+		Queue<Vector2i> openList = new Queue<Vector2i>();
+		HashSet<Vector2i> visitedSet = new HashSet<Vector2i>();
+
+		openList.Enqueue(startPos);
+
+		while(openList.Count > 0) {
+			Vector2i currentPos = openList.Dequeue();
+			visitedSet.Add(currentPos);
+
+			if(!gameboard.isInside(currentPos.x, currentPos.y)) continue;
+
+			Tile currentTile = gameboard.tiles[currentPos.x, currentPos.y];
+
+			if(!walkableTiles.Contains(currentTile.Type) && (currentTile.Type != TileType.FLOOR || !skipOverOneFloor)) continue;
+
+			//Add neighbours to openList
+			for(int i = 0; i < neighbourOffsets.Length; i++) {
+				Vector2i nextPos = currentPos + neighbourOffsets[i];
+
+				if(!gameboard.isInside(nextPos.x, nextPos.y)) continue;
+
+				Tile nextTile = gameboard.tiles[nextPos.x, nextPos.y];
+
+				//Have we reached our goal?
+				if(nextTile.Type == target) return true;
+
+				//nextTile.Type == TileType.FLOOR && currentTile.Type != TileType.FLOOR && skipOverOneFloor
+				if(!walkableTiles.Contains(nextTile.Type) && (nextTile.Type != TileType.FLOOR || currentTile.Type == TileType.FLOOR || !skipOverOneFloor) ||
+				   openList.Contains(nextPos) || visitedSet.Contains(nextPos)) continue;
+
+				openList.Enqueue(nextPos);
 			}
 		}
 
