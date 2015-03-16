@@ -9,6 +9,7 @@ public class GameBoard : MonoBehaviour {
 	public int sizeY = 20;
 	public TilePrefabLibrary tilePrefabLibrary;
 	public HighlighterManager highlighterManager;
+	public LevelAssertion levelAssertion;
 
 	public Transform leftPeremiter;
 	public Transform rightPeremiter;
@@ -41,6 +42,21 @@ public class GameBoard : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 		
+	}
+	
+	public void updateRoomList() {
+		rooms = new HashSet<Vector2i>();
+		
+		for(int x = 0; x < sizeX; x++) {
+			for(int y = 0; y < sizeY; y++) {
+				Tile t = tiles[x,y];
+				Vector2i tilePos = new Vector2i(t.X,t.Y);
+				
+				if(t.Type.IsRoom && !rooms.Contains(tilePos)) {
+					rooms.Add(tilePos);
+				}
+			}
+		}
 	}
 
 	public void bakeLevel() {
@@ -75,13 +91,8 @@ public class GameBoard : MonoBehaviour {
 		}
 	}
 
-	public void loadScene(string sceneName) {
-		bakeLevel();
-		Application.LoadLevel(sceneName);
-	}
-
 	public bool swapTiles(Tile newTile) {
-		if(!isInside(newTile.X, newTile.Y)) {
+		if(!isInside(newTile.X, newTile.Y) || tiles[newTile.X, newTile.Y].Type == newTile.Type) {
 			return false;
 		}
 
@@ -112,6 +123,12 @@ public class GameBoard : MonoBehaviour {
 			}
 
 			newTile.createGameObject();
+		}
+		
+		if(levelAssertion != null) {
+			levelAssertion.assertLevel();
+		} else {
+			Debug.LogWarning("LevelAssertion is not set @ GameBoard");
 		}
 
 		return true;

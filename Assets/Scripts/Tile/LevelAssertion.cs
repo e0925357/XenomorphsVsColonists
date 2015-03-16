@@ -20,6 +20,7 @@ public class LevelAssertion : MonoBehaviour {
 
 	public void assertLevel() {
 		assertionErrorList.Clear();
+		gameboard.updateRoomList();
 		
 		int mineCont = 0;
 		int armoryCount = 0;
@@ -55,7 +56,9 @@ public class LevelAssertion : MonoBehaviour {
 		if(mineCont <= 0) {
 			assertionErrorList.Add(new LevelAssertionError("You must build at least one mine!", LevelAssErrType.ROOM_MISSING));
 		
-		} else if(armoryCount <= 0) {
+		}
+		
+		 if(armoryCount <= 0) {
 			assertionErrorList.Add(new LevelAssertionError("You must build at least one armory!", LevelAssErrType.ROOM_MISSING));
 		}
 	}
