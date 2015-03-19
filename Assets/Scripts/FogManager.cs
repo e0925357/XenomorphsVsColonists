@@ -7,10 +7,13 @@ public class FogManager : MonoBehaviour {
 	public UnitManager unitManager;
 	public PlayerManager playerManager;
 
+	public delegate void unitSeen(Unit seenUnit, Unit watcher);
+	public event unitSeen unitSeenEvent;
+
 	public Material visibleMat;
 	public Material hiddenMat;
 
-	private bool[,] visibleField;
+	private List<Unit>[,,] visibleField;
 
 	private GameBoard gameboard;
 	private LineDrawer lineDrawer;
@@ -26,7 +29,7 @@ public class FogManager : MonoBehaviour {
 		gameboard = GameObject.Find("GameBoard").GetComponent<GameBoard>();
 		bfs = new BreadthFirstSearch();
 
-		visibleField = new bool[gameboard.sizeX, gameboard.sizeY];
+		visibleField = new List<Unit>[gameboard.sizeX, gameboard.sizeY, playerManager.playerCount];
 
 		transperentTiles = new HashSet<TileType>();
 		transperentTiles.Add(TileType.FLOOR);
@@ -39,6 +42,15 @@ public class FogManager : MonoBehaviour {
 		costMap[TileType.VENT] = 1.5f;
 
 		lineDrawer = new RoundToNearestLineDrawer(checkTileVisible);
+
+		//initialize visible field
+		for(int x = 0; x < gameboard.sizeX; x++) {
+			for(int y = 0; y < gameboard.sizeY; y++) {
+				for(int player = 0; player < playerManager.playerCount; player++) {
+					visibleField[x,y, player] = new List<Unit>();
+				}
+			}
+		}
 
 		updateFog();
 	}
@@ -55,6 +67,16 @@ public class FogManager : MonoBehaviour {
 
 	public void onUnitMovement(Unit unit) {
 		updateFog();
+
+		if (unitSeenEvent != null) {
+			for(int player = 0; player < playerManager.playerCount; player++) {
+				if(player + 1 == unit.Team) continue;
+
+				foreach(Unit watcher in visibleField[unit.Position.x, unit.Position.y, player]) {
+					unitSeenEvent(unit, watcher);
+				}
+			}
+		}
 	}
 
 	public void onEndTurn(int lastPlayer, int nextPlayer) {
@@ -69,7 +91,7 @@ public class FogManager : MonoBehaviour {
 		//make everything invisible
 		for(int x = 0; x < gameboard.sizeX; x++) {
 			for(int y = 0; y < gameboard.sizeY; y++) {
-				visibleField[x,y] = false;
+				visibleField[x,y, player-1].Clear();
 				TileData td = gameboard.tiles[x,y].TileData;
 
 				if(td != null) {
@@ -103,7 +125,7 @@ public class FogManager : MonoBehaviour {
 
 				if(visible) {
 					TileData td = gameboard.tiles[putativeVisiblePos.x,putativeVisiblePos.y].TileData;
-					visibleField[putativeVisiblePos.x,putativeVisiblePos.y] = true;
+					visibleField[putativeVisiblePos.x,putativeVisiblePos.y, player-1].Add(u);
 
 					if(td != null) {
 						td.setMaterial(visibleMat);
@@ -120,7 +142,7 @@ public class FogManager : MonoBehaviour {
 			UnitData uData = u.UnitData;
 			
 			if(uData != null) {
-				uData.setVisible(visibleField[u.Position.x, u.Position.y]);
+				uData.setVisible(visibleField[u.Position.x, u.Position.y, player-1].Count > 0);
 			}
 		}
 	}
