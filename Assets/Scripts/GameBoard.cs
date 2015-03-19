@@ -7,13 +7,17 @@ public class GameBoard : MonoBehaviour {
 	public HashSet<Vector2i> rooms = null;
 	public int sizeX = 20;
 	public int sizeY = 20;
+	public int mineCount = 3;
 	public TilePrefabLibrary tilePrefabLibrary;
 	public HighlighterManager highlighterManager;
+	public LevelAssertion levelAssertion;
 
 	public Transform leftPeremiter;
 	public Transform rightPeremiter;
 	public Transform upperPeremiter;
 	public Transform lowerPeremiter;
+
+	public LevelAssertionDisplay levelAssertionDisplay = null;
 
 	// Use this for initialization
 	void Start() {
@@ -36,11 +40,37 @@ public class GameBoard : MonoBehaviour {
 
 		rightPeremiter.localPosition = new Vector3(sizeX*2 - 2, 0, 0);
 		upperPeremiter.localPosition = new Vector3(0, 0, sizeY*2 - 2);
+		
+		//Add Mines
+		for(int i = 0; i < mineCount; i++) {
+			Tile mine;
+			
+			do {
+				mine = TileType.MINE.createTile(Random.Range(0, sizeX-5), Random.Range(0, sizeY-5));
+			} while(!mine.isSpawnPositionValid(mine.X, mine.Y));
+			
+			swapTiles(mine);
+		}
 	}
 	
 	// Update is called once per frame
 	void Update() {
 		
+	}
+	
+	public void updateRoomList() {
+		rooms = new HashSet<Vector2i>();
+		
+		for(int x = 0; x < sizeX; x++) {
+			for(int y = 0; y < sizeY; y++) {
+				Tile t = tiles[x,y];
+				Vector2i tilePos = new Vector2i(t.X,t.Y);
+				
+				if(t.Type.IsRoom && !rooms.Contains(tilePos)) {
+					rooms.Add(tilePos);
+				}
+			}
+		}
 	}
 
 	public void bakeLevel() {
@@ -75,14 +105,18 @@ public class GameBoard : MonoBehaviour {
 		}
 	}
 
-	public void loadScene(string sceneName) {
-		bakeLevel();
-		Application.LoadLevel(sceneName);
-	}
-
 	public bool swapTiles(Tile newTile) {
-		if(!isInside(newTile.X, newTile.Y)) {
+		if(!isInside(newTile.X, newTile.Y) || tiles[newTile.X, newTile.Y].Type == newTile.Type) {
 			return false;
+		}
+		
+		//does it intersect with a mine?
+		for (int x = newTile.X; x < newTile.X + newTile.Width; x++) {
+			for (int y = newTile.Y; y < newTile.Y + newTile.Height; y++) {
+			
+				//it does -> you shall not build here!
+				if(tiles[x,y].Type == TileType.MINE) return false;
+			}
 		}
 
 		if(tiles[newTile.X, newTile.Y].Width == 1 && tiles[newTile.X, newTile.Y].Height == 1 && newTile.Width == 1 && newTile.Height == 1) {
@@ -112,6 +146,19 @@ public class GameBoard : MonoBehaviour {
 			}
 
 			newTile.createGameObject();
+		}
+		
+		if(levelAssertion != null) {
+			levelAssertion.assertLevel();
+
+			if(levelAssertionDisplay != null) {
+				levelAssertionDisplay.UpdateDisplay(levelAssertion.AssertionErrorList, this);
+			}
+			else {
+				Debug.LogWarning("LevelAssertionDisplay is not set in Gameboard!");
+			}
+		} else {
+			Debug.LogWarning("LevelAssertion is not set @ GameBoard");
 		}
 
 		return true;
