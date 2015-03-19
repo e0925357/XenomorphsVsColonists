@@ -41,14 +41,16 @@ public class LevelAssertion : MonoBehaviour {
 			if(roomTile.Type != TileType.AIR) {
 				//connected to air-purifictation?
 				if(!checkIfConnectedTo(roomTile, TileType.AIR, airDucts, true)) {
-					assertionErrorList.Add(new LevelAssertionError("You must connect this room to an air-purificator!", LevelAssErrType.ROOM_CONNECTION, roomTile));
+					assertionErrorList.Add(new LevelAssertionError("You must connect this room to an air-purificator!",
+					                                               LevelAssErrType.ROOM_CONNECTION_VENTILATION, roomTile));
 				}
 			}
 			
 			if(roomTile.Type == TileType.AIR || roomTile.Type == TileType.MINE) {
 				//connected to reactor?
 				if(!checkIfConnectedTo(roomTile, TileType.REACTOR, powerDucts, true)) {
-					assertionErrorList.Add(new LevelAssertionError("You must connect this room to a reactor!", LevelAssErrType.ROOM_CONNECTION, roomTile));
+					assertionErrorList.Add(new LevelAssertionError("You must connect this room to a reactor!",
+					                                               LevelAssErrType.ROOM_CONNECTION_ENERGY, roomTile));
 				}
 			}
 		}

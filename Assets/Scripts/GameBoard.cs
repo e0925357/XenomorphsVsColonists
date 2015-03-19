@@ -17,6 +17,8 @@ public class GameBoard : MonoBehaviour {
 	public Transform upperPeremiter;
 	public Transform lowerPeremiter;
 
+	public LevelAssertionDisplay levelAssertionDisplay = null;
+
 	// Use this for initialization
 	void Start() {
 		tilePrefabLibrary.initTileType(this);
@@ -148,6 +150,13 @@ public class GameBoard : MonoBehaviour {
 		
 		if(levelAssertion != null) {
 			levelAssertion.assertLevel();
+
+			if(levelAssertionDisplay != null) {
+				levelAssertionDisplay.UpdateDisplay(levelAssertion.AssertionErrorList, this);
+			}
+			else {
+				Debug.LogWarning("LevelAssertionDisplay is not set in Gameboard!");
+			}
 		} else {
 			Debug.LogWarning("LevelAssertion is not set @ GameBoard");
 		}
