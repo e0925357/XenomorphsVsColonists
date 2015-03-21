@@ -15,6 +15,7 @@ public class HighlighterManager : MonoBehaviour {
 	public GameObject highligherPrefab;
 
 	public UnitManager unitManager;
+	public ActionManager actionManager;
 
 	private GameBoard gameboard;
 	private HighlighterData[,] highlighters;
@@ -37,6 +38,7 @@ public class HighlighterManager : MonoBehaviour {
 				highlighters[x, y].x = x;
 				highlighters[x, y].y = y;
 				highlighters[x, y].unitManager = unitManager;
+				highlighters[x, y].actionManager = actionManager;
 				highlighterStates[x, y] = HighlighterState.HIDDEN;
 				MeshRenderer[] meshRenderers = highlighters[x, y].GetComponentsInChildren<MeshRenderer>();
 
