@@ -83,10 +83,12 @@ public class GameBoard : MonoBehaviour {
 
 				if(rooms.Contains(pos)) continue;
 
-				if(tiles[x,y].Width > 1 || tiles[x,y].Height > 1) {
-					for(int x2 = tiles[x,y].X; x2 < tiles[x,y].X + tiles[x,y].Width; x2++) {
-						for(int y2 = tiles[x,y].Y; y2 < tiles[x,y].Y + tiles[x,y].Height; y2++) {
-							if(x2 == tiles[x,y].X || x2 == (tiles[x,y].X + tiles[x,y].Width - 1) || y2 == tiles[x,y].Y || y2 == (tiles[x,y].Y + tiles[x,y].Height - 1)) {
+				Tile tile = tiles[x,y];
+
+				if(tile.Width > 1 || tile.Height > 1) {
+					for(int x2 = tile.X; x2 < tile.X + tile.Width; x2++) {
+						for(int y2 = tile.Y; y2 < tile.Y + tile.Height; y2++) {
+							if(x2 == tile.X || x2 == (tile.X + tile.Width - 1) || y2 == tile.Y || y2 == (tile.Y + tile.Height - 1)) {
 								tileTypes[x2,y2] = TileType.FLOOR;
 							} else {
 								tileTypes[x2,y2] = TileType.WALL;
@@ -95,12 +97,14 @@ public class GameBoard : MonoBehaviour {
 					}
 
 					rooms.Add(pos);
+					GameObject errorCanvas = tile.TileData.transform.FindChild("ErrorCanvas").gameObject;
+					Destroy (errorCanvas);
 
 				} else {
-					tileTypes[x,y] = tiles[x,y].Type;
+					tileTypes[x,y] = tile.Type;
 				}
 
-				tiles[x,y].deactivateCollider();
+				tile.deactivateCollider();
 			}
 		}
 	}

@@ -6,12 +6,13 @@ public class UnitType {
 	public static readonly UnitType COLONIST = new UnitType(0, "Colonist");
 	public static readonly UnitType SOLDIER = new UnitType(1, "Soldier");
 	public static readonly UnitType XENO = new UnitType(2, "Xenomorph");
+	public static readonly UnitType XENO_EGG = new UnitType(3, "Xenomorph Egg");
 
 	private static PlayerManager playerManager;
 	private static UnitManager unitManager;
 	
 	static UnitType() {
-		instances = new UnitType[]{COLONIST, SOLDIER, XENO};
+		instances = new UnitType[]{COLONIST, SOLDIER, XENO, XENO_EGG};
 	}
 	
 	public static UnitType getById(int id) {
@@ -45,6 +46,8 @@ public class UnitType {
 			return new Soldier(new Vector2i(x, y), playerManager, unitManager);
 		case 2:
 			return new Xenomorph(new Vector2i(x, y), playerManager, unitManager);
+		case 3:
+			return new XenomorphEgg(new Vector2i(x, y), playerManager, unitManager);
 		default:
 			return null;
 		}

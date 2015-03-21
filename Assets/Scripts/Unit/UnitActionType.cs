@@ -5,6 +5,7 @@ public class UnitActionType {
 	public static readonly UnitActionType WALK = new UnitActionType(0, "walk");
 	public static readonly UnitActionType SHOOT = new UnitActionType(1, "shoot");
 	public static readonly UnitActionType SLASH = new UnitActionType(2, "slash");
+	public static readonly UnitActionType LAY_EGG = new UnitActionType(3, "lay egg");
 
 	private static HighlighterManager highlighterManager = null;
 	private static GameObject shootPrefab = null;
@@ -34,6 +35,8 @@ public class UnitActionType {
 			return new ShootAction(unit, highlighterManager, shootPrefab);
 		case 2:
 			return new SlashAction(unit, highlighterManager, slashPrefab);
+		case 3:
+			return new LayEggAction(unit, highlighterManager);
 		default:
 			return null;
 		}

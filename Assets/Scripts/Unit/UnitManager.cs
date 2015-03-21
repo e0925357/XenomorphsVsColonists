@@ -24,6 +24,7 @@ public class UnitManager : MonoBehaviour {
 	public Sprite moveIcon;
 	public Sprite shootIcon;
 	public Sprite slashIcon;
+	public Sprite eggIcon;
 	public GameObject shootPrefab;
 	public GameObject slashPrefab;
 
@@ -33,6 +34,7 @@ public class UnitManager : MonoBehaviour {
 		UnitActionType.WALK.Icon = moveIcon;
 		UnitActionType.SHOOT.Icon = shootIcon;
 		UnitActionType.SLASH.Icon = slashIcon;
+		UnitActionType.LAY_EGG.Icon = eggIcon;
 
 		GameObject go = GameObject.Find("GameBoard");
 		gameBoard = go.GetComponent<GameBoard>();
