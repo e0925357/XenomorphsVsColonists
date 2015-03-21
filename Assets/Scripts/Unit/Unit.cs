@@ -73,6 +73,12 @@ public abstract class Unit {
 		unitData.unit = this;
 		unitData.playerManager = playerManager;
 		unitData.unitManager = unitManager;
+
+		GameObject markerGO = (GameObject)GameObject.Instantiate(type.MarkerPrefab);
+		MarkerScript ms = markerGO.GetComponent<MarkerScript> ();
+		ms.MarkedUnit = this;
+		ms.playerManager = playerManager;
+
 	}
 
 	public void destroyGameObject() {

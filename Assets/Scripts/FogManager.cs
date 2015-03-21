@@ -38,6 +38,10 @@ public class FogManager : MonoBehaviour {
 		visibleField = new List<Unit>[gameboard.sizeX, gameboard.sizeY, playerManager.playerCount];
 		visibleEnemies = new HashSet<Unit>[playerManager.playerCount];
 
+		for (int i = 0; i < playerManager.playerCount; i++) {
+			visibleEnemies[i] = new HashSet<Unit>();
+		}
+
 		transperentTiles = new HashSet<TileType>();
 		transperentTiles.Add(TileType.FLOOR);
 		transperentTiles.Add(TileType.CABLE);
@@ -95,12 +99,19 @@ public class FogManager : MonoBehaviour {
 	}
 	
 	private void updateFog(int player) {
-		HashSet<Unit> seenUnits = new HashSet<Unit> ();
+		HashSet<Unit>[] seenUnits = new HashSet<Unit>[playerManager.playerCount];
+		
+		for (int i = 0; i < playerManager.playerCount; i++) {
+			seenUnits[i] = new HashSet<Unit>();
+		}
 
 		//make everything invisible
 		for(int x = 0; x < gameboard.sizeX; x++) {
 			for(int y = 0; y < gameboard.sizeY; y++) {
-				visibleField[x,y, player-1].Clear();
+				for(int p = 0; p < playerManager.playerCount; p++) {
+					visibleField[x,y, p].Clear();
+				}
+
 				TileData td = gameboard.tiles[x,y].TileData;
 
 				if(td != null) {
@@ -110,13 +121,9 @@ public class FogManager : MonoBehaviour {
 		}
 
 		foreach(Unit u in unitManager.ActiveUnits) {
-			if(u.Team != player) {
-				continue;
-			}
-
 			UnitData uData = u.UnitData;
 
-			if(uData != null) {
+			if(uData != null && u.Team == player) {
 				uData.setVisible(true);
 			}
 
@@ -134,16 +141,16 @@ public class FogManager : MonoBehaviour {
 
 				if(visible) {
 					TileData td = gameboard.tiles[putativeVisiblePos.x,putativeVisiblePos.y].TileData;
-					visibleField[putativeVisiblePos.x,putativeVisiblePos.y, player-1].Add(u);
+					visibleField[putativeVisiblePos.x,putativeVisiblePos.y, u.Team-1].Add(u);
 
-					if(td != null) {
+					if(td != null && u.Team == player) {
 						td.setMaterial(visibleMat);
 					}
 				}
 			}
 
 			foreach(Unit visibleUnit in putativeVisibles.Units) {
-				if(seenUnits.Contains(visibleUnit) || visibleUnit.Team == player) {
+				if(seenUnits[u.Team-1].Contains(visibleUnit) || visibleUnit.Team == u.Team) {
 					continue;
 				}
 
@@ -153,7 +160,7 @@ public class FogManager : MonoBehaviour {
 				lineDrawer.drawLine(u.Position, visibleUnit.Position);
 
 				if(visible) {
-					seenUnits.Add(visibleUnit);
+					seenUnits[u.Team-1].Add(visibleUnit);
 				}
 			}
 		}
@@ -170,23 +177,26 @@ public class FogManager : MonoBehaviour {
 			}
 		}
 
-		if (unitVisibleEvent != null) {
-			foreach(Unit nowVisibleUnit in seenUnits) {
-				if(!visibleEnemies[player-1].Contains(nowVisibleUnit)) {
-					unitVisibleEvent(nowVisibleUnit);
+		for(int p = 0; p < playerManager.playerCount; p++) {
+
+			if (unitVisibleEvent != null) {
+				foreach(Unit nowVisibleUnit in seenUnits[p]) {
+					if(!visibleEnemies[p].Contains(nowVisibleUnit)) {
+						unitVisibleEvent(nowVisibleUnit);
+					}
 				}
 			}
-		}
 
-		if (unitInvisibleEvent != null) {
-			foreach(Unit lastVisibleUnit in visibleEnemies[player-1]) {
-				if(!seenUnits.Contains(lastVisibleUnit)) {
-					unitInvisibleEvent(lastVisibleUnit);
+			if (unitInvisibleEvent != null) {
+				foreach(Unit lastVisibleUnit in visibleEnemies[p]) {
+					if(!seenUnits[p].Contains(lastVisibleUnit)) {
+						unitInvisibleEvent(lastVisibleUnit);
+					}
 				}
 			}
-		}
 
-		visibleEnemies[player-1] = seenUnits;
+			visibleEnemies[p] = seenUnits[p];
+		}
 	}
 
 	public void checkTileVisible(Vector2i pos) {

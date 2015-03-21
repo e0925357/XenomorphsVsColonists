@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MarkerScript : MonoBehaviour {
 
-	public Unit markedUnit = null;
+	private Unit markedUnit = null;
 	public PlayerManager playerManager;
 	public bool markerActive = false;
 
@@ -11,12 +11,20 @@ public class MarkerScript : MonoBehaviour {
 		FogManager.unitVisibleEvent += unitVisible;
 		FogManager.unitInvisibleEvent += unitInvisible;
 		PlayerManager.endTurnEvent += onEndTurn;
+
+		if (markedUnit != null) {
+			markedUnit.onDeathEvent += death;
+		}
 	}
 	
 	void OnDisable() {
 		FogManager.unitVisibleEvent -= unitVisible;
 		FogManager.unitInvisibleEvent -= unitInvisible;
 		PlayerManager.endTurnEvent -= onEndTurn;
+
+		if (markedUnit != null) {
+			markedUnit.onDeathEvent -= death;
+		}
 	}
 
 	public void unitVisible(Unit unit) {
@@ -65,4 +73,26 @@ public class MarkerScript : MonoBehaviour {
 			setVisible(visible, trans.GetChild(i));
 		}
 	}
+
+	void death(Unit unit) {
+		Destroy (gameObject);
+	}
+
+	public Unit MarkedUnit {
+		get {
+			return this.markedUnit;
+		}
+		set {
+
+			if(value != null) {
+				value.onDeathEvent += death;
+			}
+
+			if(markedUnit != null) {
+				markedUnit.onDeathEvent -= death;
+			}
+
+			markedUnit = value;
+		}
+	} 
 }
