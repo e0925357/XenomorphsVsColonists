@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class LevelAssertionDisplay : MonoBehaviour {
+
+	public Text errorText;
 
 	private Dictionary<Tile, DisplayedError> errorDict = new Dictionary<Tile, DisplayedError>();
 	
@@ -10,6 +13,8 @@ public class LevelAssertionDisplay : MonoBehaviour {
 		errorDict.Clear ();
 
 		// Update the values
+		bool errorTextWritten = false;
+
 		foreach (LevelAssertionError error in errorList) {
 			Tile causingTile = error.CausingTile;
 			switch(error.Type) {
@@ -43,9 +48,20 @@ public class LevelAssertionDisplay : MonoBehaviour {
 
 			default:
 			{
-				// Do nothing atm.
+				// Write the error to the errorText
+				if(errorText) {
+					errorText.text = error.Message;
+					errorTextWritten = true;
+				}
+				else {
+					Debug.LogWarning("errorText not set in LevelAssertionDisplay.");
+				}
 			} break;
 			}
+		}
+
+		if (!errorTextWritten) {
+			errorText.text = string.Empty;
 		}
 
 		// Unset unneeded values

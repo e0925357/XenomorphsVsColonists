@@ -76,6 +76,10 @@
      <Compile Include="Assets\Scripts\Tile\Transporters.cs" />
      <Compile Include="Assets\Scripts\Tile\VentShaft.cs" />
      <Compile Include="Assets\Scripts\Tile\Wall.cs" />
+     <Compile Include="Assets\Scripts\UI\BlinkingIcon.cs" />
+     <Compile Include="Assets\Scripts\UI\DisplayedError.cs" />
+     <Compile Include="Assets\Scripts\UI\ErrorGui.cs" />
+     <Compile Include="Assets\Scripts\UI\LevelAssertionDisplay.cs" />
      <Compile Include="Assets\Scripts\Unit\ActionManager.cs" />
      <Compile Include="Assets\Scripts\Unit\Colonist.cs" />
      <Compile Include="Assets\Scripts\Unit\ShootAction.cs" />
@@ -105,10 +109,6 @@
      <Compile Include="Assets\Scripts\path\RoundToNearestLineDrawer.cs" />
      <Compile Include="Assets\Scripts\path\SearchResult.cs" />
      <Compile Include="Assets\Scripts\path\ThickLineDrawer.cs" />
-     <Compile Include="Assets\UI\BlinkingIcon.cs" />
-     <Compile Include="Assets\UI\DisplayedError.cs" />
-     <Compile Include="Assets\UI\ErrorGui.cs" />
-     <Compile Include="Assets\UI\LevelAssertionDisplay.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
  </Reference>
