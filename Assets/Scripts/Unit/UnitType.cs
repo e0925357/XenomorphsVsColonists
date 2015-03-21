@@ -25,7 +25,7 @@ public class UnitType {
 	private readonly int id;
 	private readonly string name;
 	private GameObject prefab;
-	private GameObject previewPrefab;
+	private GameObject markerPrefab;
 
 	public static void init(PlayerManager playerManager, UnitManager unitManager) {
 		UnitType.playerManager = playerManager;
@@ -65,12 +65,12 @@ public class UnitType {
 		}
 	}
 	
-	public GameObject PreviewPrefab {
+	public GameObject MarkerPrefab {
 		get {
-			return this.previewPrefab;
+			return this.markerPrefab;
 		}
 		set {
-			previewPrefab = value;
+			markerPrefab = value;
 		}
 	}
 

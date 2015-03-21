@@ -8,7 +8,11 @@ public class FogManager : MonoBehaviour {
 	public PlayerManager playerManager;
 
 	public delegate void unitSeen(Unit seenUnit, Unit watcher);
-	public event unitSeen unitSeenEvent;
+	public static event unitSeen unitSeenEvent;
+
+	public delegate void unitVisibilityChange(Unit unit);
+	public static event unitVisibilityChange unitVisibleEvent;
+	public static event unitVisibilityChange unitInvisibleEvent;
 
 	public Material visibleMat;
 	public Material hiddenMat;
@@ -24,12 +28,15 @@ public class FogManager : MonoBehaviour {
 	private Dictionary<TileType, float> costMap;
 	private BreadthFirstSearch bfs;
 
+	private HashSet<Unit>[] visibleEnemies;
+
 	// Use this for initialization
 	void Start () {
 		gameboard = GameObject.Find("GameBoard").GetComponent<GameBoard>();
 		bfs = new BreadthFirstSearch();
 
 		visibleField = new List<Unit>[gameboard.sizeX, gameboard.sizeY, playerManager.playerCount];
+		visibleEnemies = new HashSet<Unit>[playerManager.playerCount];
 
 		transperentTiles = new HashSet<TileType>();
 		transperentTiles.Add(TileType.FLOOR);
@@ -88,6 +95,8 @@ public class FogManager : MonoBehaviour {
 	}
 	
 	private void updateFog(int player) {
+		HashSet<Unit> seenUnits = new HashSet<Unit> ();
+
 		//make everything invisible
 		for(int x = 0; x < gameboard.sizeX; x++) {
 			for(int y = 0; y < gameboard.sizeY; y++) {
@@ -132,6 +141,21 @@ public class FogManager : MonoBehaviour {
 					}
 				}
 			}
+
+			foreach(Unit visibleUnit in putativeVisibles.Units) {
+				if(seenUnits.Contains(visibleUnit) || visibleUnit.Team == player) {
+					continue;
+				}
+
+				visible = true;
+				ignorePos2 = visibleUnit.Position;
+
+				lineDrawer.drawLine(u.Position, visibleUnit.Position);
+
+				if(visible) {
+					seenUnits.Add(visibleUnit);
+				}
+			}
 		}
 
 		foreach(Unit u in unitManager.ActiveUnits) {
@@ -145,6 +169,24 @@ public class FogManager : MonoBehaviour {
 				uData.setVisible(visibleField[u.Position.x, u.Position.y, player-1].Count > 0);
 			}
 		}
+
+		if (unitVisibleEvent != null) {
+			foreach(Unit nowVisibleUnit in seenUnits) {
+				if(!visibleEnemies[player-1].Contains(nowVisibleUnit)) {
+					unitVisibleEvent(nowVisibleUnit);
+				}
+			}
+		}
+
+		if (unitInvisibleEvent != null) {
+			foreach(Unit lastVisibleUnit in visibleEnemies[player-1]) {
+				if(!seenUnits.Contains(lastVisibleUnit)) {
+					unitInvisibleEvent(lastVisibleUnit);
+				}
+			}
+		}
+
+		visibleEnemies[player-1] = seenUnits;
 	}
 
 	public void checkTileVisible(Vector2i pos) {

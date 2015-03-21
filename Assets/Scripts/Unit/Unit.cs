@@ -2,12 +2,15 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public abstract class Unit {
+	private static int nextId = 0;
+
 	public delegate void statsChanged(Unit unit);
 	public event statsChanged statsEvent;
 
 	public delegate void death(Unit unit);
 	public event statsChanged onDeathEvent;
 
+	private int id;
 	protected int maxAP;
 	protected int ap;
 	protected float maxHealth;
@@ -46,6 +49,7 @@ public abstract class Unit {
 		this.walkableTiles = new HashSet<TileType>(walkableTiles);
 		this.playerManager = playerManager;
 		this.unitManager = unitManager;
+		id = nextId++;
 
 		PlayerManager.endTurnEvent += onEndTurn;
 	}
@@ -238,6 +242,24 @@ public abstract class Unit {
 	public float MaxSight {
 		get {
 			return this.maxSight;
+		}
+	}
+
+	public override bool Equals (object obj) {
+		if (obj == null)
+			return false;
+		if (ReferenceEquals (this, obj))
+			return true;
+		if (obj.GetType () != typeof(Unit))
+			return false;
+		Unit other = (Unit)obj;
+		return id == other.id;
+	}
+	
+
+	public override int GetHashCode () {
+		unchecked {
+			return id;
 		}
 	}
 }
