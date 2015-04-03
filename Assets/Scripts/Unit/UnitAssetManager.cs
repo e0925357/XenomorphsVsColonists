@@ -4,6 +4,7 @@ using System.Collections;
 public class UnitAssetManager : MonoBehaviour {
 
 	public GameObject xenoPrefab;
+	public GameObject xenoMinionPrefab;
 	public GameObject colonistPrefab;
 	public GameObject soldierPrefab;
 	public GameObject eggPrefab;
@@ -18,6 +19,8 @@ public class UnitAssetManager : MonoBehaviour {
 
 		UnitType.XENO.Prefab = xenoPrefab;
 		UnitType.XENO.MarkerPrefab = markerPrefab;
+		UnitType.XENO_MINION.Prefab = xenoMinionPrefab;
+		UnitType.XENO_MINION .MarkerPrefab = markerPrefab;
 		UnitType.COLONIST.Prefab = colonistPrefab;
 		UnitType.COLONIST.MarkerPrefab = markerPrefab;
 		UnitType.SOLDIER.Prefab = soldierPrefab;

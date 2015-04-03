@@ -25,6 +25,7 @@ public class UnitManager : MonoBehaviour {
 	public Sprite shootIcon;
 	public Sprite slashIcon;
 	public Sprite eggIcon;
+	public Sprite breedIcon;
 	public GameObject shootPrefab;
 	public GameObject slashPrefab;
 
@@ -35,6 +36,7 @@ public class UnitManager : MonoBehaviour {
 		UnitActionType.SHOOT.Icon = shootIcon;
 		UnitActionType.SLASH.Icon = slashIcon;
 		UnitActionType.LAY_EGG.Icon = eggIcon;
+		UnitActionType.BREED_EGG.Icon = breedIcon;
 
 		GameObject go = GameObject.Find("GameBoard");
 		gameBoard = go.GetComponent<GameBoard>();
@@ -52,9 +54,8 @@ public class UnitManager : MonoBehaviour {
 				createdUnit = UnitType.SOLDIER.createUnit(roomPos.x, roomPos.y);
 
 			} else if(roomTile.Type ==TileType.QUATERS) {
-				//Create Xenomorph
+				//Create Colonist
 				createdUnit = UnitType.COLONIST.createUnit(roomPos.x, roomPos.y);
-				alienCreated = true;
 			} else if(!alienCreated && roomTile.Type ==TileType.MINE) {
 				//Create Xenomorph
 				createdUnit = UnitType.XENO.createUnit(roomPos.x, roomPos.y);
