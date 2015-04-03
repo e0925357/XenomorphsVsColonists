@@ -6,6 +6,7 @@ public class UnitActionType {
 	public static readonly UnitActionType SHOOT = new UnitActionType(1, "shoot");
 	public static readonly UnitActionType SLASH = new UnitActionType(2, "slash");
 	public static readonly UnitActionType LAY_EGG = new UnitActionType(3, "lay egg");
+	public static readonly UnitActionType BREED_EGG = new UnitActionType (4, "breed egg");
 
 	private static HighlighterManager highlighterManager = null;
 	private static GameObject shootPrefab = null;
@@ -37,6 +38,8 @@ public class UnitActionType {
 			return new SlashAction(unit, highlighterManager, slashPrefab);
 		case 3:
 			return new LayEggAction(unit, highlighterManager);
+		case 4:
+			return new BreedEggAction(unit,highlighterManager);
 		default:
 			return null;
 		}
