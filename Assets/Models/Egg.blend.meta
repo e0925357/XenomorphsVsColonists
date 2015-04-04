@@ -7,10 +7,18 @@ ModelImporter:
     100002: //RootNode
     100004: Plane
     100006: Tentacle_Shape
+    100008: Armature
+    100010: Bone
+    100012: EggBone
+    100014: RootBone
     400000: Circle
     400002: //RootNode
     400004: Plane
     400006: Tentacle_Shape
+    400008: Armature
+    400010: Bone
+    400012: EggBone
+    400014: RootBone
     2300000: Circle
     2300002: Plane
     2300004: Tentacle_Shape
@@ -23,7 +31,10 @@ ModelImporter:
     4300002: Circle
     4300004: Plane
     7400000: Default Take
+    7400002: PreHatch
     9500000: //RootNode
+    11100000: //RootNode
+    13700000: Plane
   materials:
     importMaterials: 1
     materialName: 0
@@ -37,7 +48,7 @@ ModelImporter:
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
-    animationWrapMode: 0
+    animationWrapMode: 2
     extraExposedTransformPaths: []
     clipAnimations: []
     isReadable: 1
@@ -75,6 +86,6 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 1
   additionalBone: 0
   userData: 

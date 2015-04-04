@@ -21,6 +21,10 @@ public class XenomorphEgg : Unit
 	public void breed() {
 		++breedStage;
 
+		if (breedStage == 1) {
+			gameObject.GetComponentInChildren<Animation>().Play("PreHatch");
+		}
+
 		Debug.Log ("Egg was breed: " + (hatchingStage - breedStage) + " more breedings to go!");
 
 		if (breedStage >= hatchingStage) {
