@@ -5,7 +5,7 @@ public class XenomorphMinion : Unit {
 		//TODO add actions
 
 		defaultFloorAction = UnitActionType.WALK.createAction(this);
-		defaultEnemyAction = UnitActionType.SLASH.createAction(this);
+		defaultEnemyAction = UnitActionType.WEAK_SHLASH.createAction(this);
 		
 		actions = new UnitAction[]{defaultFloorAction, defaultEnemyAction};
 	}

@@ -37,6 +37,7 @@ public class UnitManager : MonoBehaviour {
 		UnitActionType.SLASH.Icon = slashIcon;
 		UnitActionType.LAY_EGG.Icon = eggIcon;
 		UnitActionType.BREED_EGG.Icon = breedIcon;
+		UnitActionType.WEAK_SHLASH.Icon = slashIcon;
 
 		GameObject go = GameObject.Find("GameBoard");
 		gameBoard = go.GetComponent<GameBoard>();
