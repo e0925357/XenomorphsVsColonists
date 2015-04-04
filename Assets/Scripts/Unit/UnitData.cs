@@ -9,8 +9,18 @@ public class UnitData : MonoBehaviour {
 
 	private ActionManager actionManager;
 
+	private Renderer objectRenderer;
+
+
+	Renderer ObjectRenderer {
+		get {
+			return this.objectRenderer;
+		}
+	}
+
 	void Start() {
 		actionManager = GameObject.Find("ActionManager").GetComponent<ActionManager>();
+		objectRenderer = (renderer == null) ? GetComponentInChildren<Renderer>() : renderer; 
 	}
 
 	void OnMouseOver() {
@@ -25,11 +35,11 @@ public class UnitData : MonoBehaviour {
 	}
 
 	void OnMouseEnter() {
-		renderer.material.color = Color.white;
+		objectRenderer.material.color = Color.white;
 	}
 
 	void OnMouseExit() {
-		renderer.material.color = new Color(0.8f, 0.8f, 0.8f);
+		objectRenderer.material.color = new Color(0.8f, 0.8f, 0.8f);
 	}
 
 	void Update() {
@@ -74,7 +84,7 @@ public class UnitData : MonoBehaviour {
 	}
 
 	private void setVisible(bool visible, Transform trans) {
-		MeshRenderer renderer = trans.GetComponent<MeshRenderer>();
+		Renderer renderer = trans.GetComponent<Renderer>();
 		
 		if(renderer != null) {
 			renderer.enabled = visible;
