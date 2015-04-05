@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 public class LayEggAction : UnitAction
 {
+	private static HashSet<TileType> breedingTiles;
+
+	static LayEggAction() {
+		breedingTiles = new HashSet<TileType> ();
+		breedingTiles.Add(TileType.FLOOR);
+	}
+
 	private UnitManager unitManager;
 	public BreadthFirstSearch bsf = new BreadthFirstSearch();
 	private SearchResult searchResult = null;
@@ -53,7 +60,7 @@ public class LayEggAction : UnitAction
 
 	public override void actionSelected ()
 	{
-		searchResult = bsf.searchReagion(unit.Position, 1, false, unit.WalkableTiles);
+		searchResult = bsf.searchReagion(unit.Position, 1, false, breedingTiles);
 		
 		highlighterManager.clearSelection();
 		highlighterManager.setState(unit.Position.x, unit.Position.y, HighlighterState.SELECTED);

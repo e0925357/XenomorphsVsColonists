@@ -19,6 +19,8 @@ public class GameBoard : MonoBehaviour {
 
 	public LevelAssertionDisplay levelAssertionDisplay = null;
 
+	public bool checkLevel = true;
+
 	// Use this for initialization
 	void Start() {
 		tilePrefabLibrary.initTileType(this);

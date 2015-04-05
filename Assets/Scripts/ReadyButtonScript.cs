@@ -10,7 +10,7 @@ public class ReadyButtonScript : MonoBehaviour {
 	public void tryChangeLevel() {
 		levelAssertion.assertLevel();
 		
-		if(levelAssertion.IsLevelValid) {
+		if(!gameboard.checkLevel || levelAssertion.IsLevelValid) {
 			Debug.Log("Starting with current level...");
 			
 			gameboard.bakeLevel();
