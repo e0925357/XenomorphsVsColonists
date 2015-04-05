@@ -7,6 +7,7 @@ public class ActionManager : MonoBehaviour {
 
 	public Image[] actionImages;
 	public Button[] actionButtons;
+	public Text[] actionTexts;
 
 	public int selectedActionIndex;
 
@@ -21,6 +22,7 @@ public class ActionManager : MonoBehaviour {
 		for(int i = 0; i < actionImages.Length; i++) {
 			actionImages[i].enabled = false;
 			actionButtons[i].enabled = false;
+			actionTexts[i].enabled = false;
 		}
 	}
 
@@ -34,6 +36,8 @@ public class ActionManager : MonoBehaviour {
 			actionImages[i].sprite = unit.Actions[i].Type.Icon;
 			actionImages[i].enabled = true;
 			actionButtons[i].enabled = true;
+			actionTexts[i].text = unit.Actions[i].ApCost + " AP";
+			actionTexts[i].enabled = true;
 		}
 
 		if(unit.DefaultFloorAction != null) {
